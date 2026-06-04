@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog — Amii Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --mint: #00FAB6;
+      --black: #0a0a0a;
+      --white: #fafafa;
+      --font-body: 'Poppins', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; overflow-y: scroll; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--white);
+      color: var(--black);
+      overflow-x: hidden;
+    }
+
+    /* ── PAGE LAYOUT ── */
+    #blog-page { padding-top: 72px; }
+
+    /* ── PAGE HEADER ── */
+    #blog-header {
+      padding: 48px 72px 40px;
+      border-bottom: 1px solid rgba(10,10,10,0.1);
+    }
+
+    .blog-header-meta {
+      display: flex;
+      align-items: baseline;
+      gap: 32px;
+      margin-bottom: 12px;
+    }
+    .blog-header-meta span {
+      font-size: clamp(0.8rem, 1vw, 1rem);
+      font-weight: 400;
+      line-height: 1;
+    }
+    .blog-header-meta .dim { opacity: 0.3; }
+
+    .blog-title-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .blog-page-title-wrap {
+      display: inline-block;
+      overflow: hidden;
+      line-height: 0.92;
+      padding-bottom: 0.06em;
+      vertical-align: bottom;
+    }
+    .blog-page-title {
+      font-size: clamp(56px, 8vw, 120px);
+      font-weight: 400;
+      line-height: 0.95;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      display: inline-block;
+      transform: translateY(110%);
+      will-change: transform;
+    }
+    .blog-arrow {
+      width: clamp(40px, 4.5vw, 80px);
+      height: clamp(40px, 4.5vw, 80px);
+      flex-shrink: 0;
+      opacity: 0;
+      transform: translateY(10px);
+      will-change: transform, opacity;
+    }
+
+    /* ── TAG FILTER ── */
+    #tag-filter {
+      padding: 28px 72px;
+      border-bottom: 1px solid rgba(10,10,10,0.08);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      opacity: 0;
+    }
+
+    .tag-btn {
+      font-family: var(--font-body);
+      font-size: clamp(0.72rem, 0.9vw, 0.85rem);
+      font-weight: 400;
+      color: rgba(10,10,10,0.5);
+      background: none;
+      border: 1px solid rgba(10,10,10,0.2);
+      border-radius: 100px;
+      padding: 6px 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .tag-btn:hover {
+      color: var(--black);
+      border-color: rgba(10,10,10,0.5);
+    }
+    .tag-btn.active {
+      background: var(--black);
+      color: var(--white);
+      border-color: var(--black);
+    }
+
+    /* ── BLOG BODY ── */
+    #blog-body {
+      padding: 56px 72px 120px;
+    }
+
+    /* ── ARTICLE GRID ── */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 56px 32px;
+    }
+
+    /* ── ARTICLE CARD ── */
+    .blog-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(24px);
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .blog-img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      position: relative;
+      background: #e0e0db;
+      margin-bottom: 16px;
+    }
+
+    .blog-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .blog-card:hover .blog-img img { transform: scale(1.05); }
+
+    .blog-img-placeholder {
+      position: absolute;
+      inset: 0;
+      background: #e0e0db;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(10,10,10,0.22);
+      transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .blog-card:hover .blog-img-placeholder { transform: scale(1.05); }
+
+    /* tag + date row */
+    .blog-card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .blog-card-tag {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: rgba(10,10,10,0.5);
+      border: 1px solid rgba(10,10,10,0.25);
+      padding: 3px 10px;
+    }
+    .blog-card-date {
+      font-size: 0.72rem;
+      font-weight: 300;
+      color: rgba(10,10,10,0.35);
+      flex-shrink: 0;
+    }
+    .blog-card-title {
+      font-size: clamp(0.9rem, 1.1vw, 1.05rem);
+      font-weight: 500;
+      line-height: 1.55;
+      color: var(--black);
+      margin-bottom: 8px;
+      transition: opacity 0.2s;
+    }
+    .blog-card:hover .blog-card-title { opacity: 0.7; }
+    .blog-card-excerpt {
+      font-size: clamp(0.78rem, 0.9vw, 0.85rem);
+      font-weight: 300;
+      line-height: 1.65;
+      color: rgba(10,10,10,0.45);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* hidden card */
+    .blog-card.hidden {
+      display: none;
+    }
+
+    /* empty state */
+    #empty-state {
+      display: none;
+      grid-column: 1 / -1;
+      padding: 80px 0;
+      text-align: center;
+      font-size: 0.9rem;
+      color: rgba(10,10,10,0.3);
+      font-weight: 300;
+    }
+
+    /* ── ARTICLE OVERLAY ── */
+    #article-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 400;
+      background: var(--white);
+      overflow-y: auto;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(0);
+      transition: opacity 0.38s ease, transform 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      will-change: opacity, transform;
+    }
+    #article-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    #article-overlay.is-closing {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-48px);
+    }
+
+    /* ── close button ── */
+    .close-btn {
+      position: fixed;
+      top: 24px;
+      right: 68px;
+      width: 48px;
+      height: 48px;
+      display: block;
+      cursor: pointer;
+      z-index: 500;
+      opacity: 0;
+      background: none;
+      border: none;
+      padding: 0;
+      text-indent: -9999px;
+      transition: opacity 0.3s ease 0.2s;
+    }
+    .close-btn::before,
+    .close-btn::after {
+      content: '';
+      width: 100%;
+      height: 1px;
+      background: var(--black);
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transition: transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .close-btn::before { transform: rotate(-45deg); }
+    .close-btn::after  { transform: rotate(45deg); }
+    .close-btn:hover::before { transform: rotate(-225deg); }
+    .close-btn:hover::after  { transform: rotate(225deg); }
+body.overlay-open .close-btn { opacity: 1; }
+
+    #article-inner {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 88px 24px 120px;
+      transform: translateY(28px);
+      opacity: 0;
+      transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.06s,
+                  opacity 0.4s ease 0.06s;
+    }
+    #article-overlay.open #article-inner {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* article cover */
+    .article-cover {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #e0e0db;
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+    .article-cover img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+    .article-cover-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: rgba(10,10,10,0.22);
+    }
+
+    /* article meta */
+    .article-meta-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .article-tags {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .article-tag {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: rgba(10,10,10,0.5);
+      border: 1px solid rgba(10,10,10,0.25);
+      padding: 3px 10px;
+    }
+    .article-tag.secondary {
+      color: rgba(10,10,10,0.3);
+      border-color: rgba(10,10,10,0.15);
+    }
+    .article-date {
+      font-size: 0.75rem;
+      font-weight: 300;
+      color: rgba(10,10,10,0.35);
+    }
+    .article-title {
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      font-weight: 500;
+      line-height: 1.3;
+      letter-spacing: -0.02em;
+      margin-bottom: 28px;
+      color: var(--black);
+    }
+
+    /* article body text */
+    .article-body {
+      font-size: clamp(0.9rem, 1.1vw, 1rem);
+      font-weight: 300;
+      line-height: 1.9;
+      color: rgba(10,10,10,0.75);
+    }
+    .article-body p {
+      margin-bottom: 1.5em;
+    }
+    .article-body p:last-child { margin-bottom: 0; }
+    .article-body strong {
+      font-weight: 500;
+      color: var(--black);
+    }
+    .article-body h3 {
+      font-size: clamp(1rem, 1.3vw, 1.15rem);
+      font-weight: 500;
+      color: var(--black);
+      margin: 2em 0 0.8em;
+      letter-spacing: -0.01em;
+    }
+    .article-body blockquote {
+      border-left: 2px solid var(--mint);
+      padding-left: 20px;
+      margin: 1.5em 0;
+      color: rgba(10,10,10,0.55);
+      font-style: italic;
+    }
+
+    /* book list */
+    .book-list {
+      margin: 1.5em 0;
+      padding: 0;
+      list-style: none;
+    }
+    .book-list li {
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(10,10,10,0.08);
+      font-size: 0.9rem;
+      color: rgba(10,10,10,0.65);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .book-list li:first-child { border-top: 1px solid rgba(10,10,10,0.08); }
+    .book-list .book-title {
+      font-weight: 500;
+      color: var(--black);
+    }
+    .book-list .book-author {
+      font-size: 0.8rem;
+      color: rgba(10,10,10,0.4);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      #blog-header { padding: 40px 5% 32px; }
+      #tag-filter { padding: 24px 5%; }
+      #blog-body { padding: 48px 5% 80px; }
+      .blog-grid { grid-template-columns: repeat(2, 1fr); gap: 48px 24px; }
+      #article-close { right: 5%; }
+    }
+
+    @media (max-width: 768px) {
+      #blog-header { padding: 32px 5% 28px; }
+      #tag-filter { padding: 20px 5%; gap: 8px; }
+      #blog-body { padding: 36px 5% 64px; }
+      .blog-grid { grid-template-columns: 1fr; gap: 40px; }
+      .blog-page-title { opacity: 1 !important; transform: none !important; }
+      .blog-arrow { opacity: 1 !important; }
+      #tag-filter { opacity: 1 !important; }
+      .blog-card { opacity: 1 !important; transform: none !important; }
+      #article-close { top: 16px; right: 5%; }
+      #article-inner { padding: 64px 0 80px; }
+    }
+
+    /* ── prev / next navigation ── */
+    .article-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+      margin-top: 64px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(10,10,10,0.1);
+    }
+    .article-nav-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      cursor: pointer;
+      max-width: 45%;
+      text-decoration: none;
+      color: inherit;
+    }
+    .article-nav-item.next { align-items: flex-end; text-align: right; }
+    .article-nav-label {
+      font-size: 0.72rem;
+      font-weight: 400;
+      color: rgba(10,10,10,0.35);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .article-nav-item.next .article-nav-label { flex-direction: row-reverse; }
+    .article-nav-arrow {
+      font-size: 0.8rem;
+      transition: transform 0.25s ease;
+    }
+    .article-nav-item:hover .article-nav-arrow { transform: translateX(-3px); }
+    .article-nav-item.next:hover .article-nav-arrow { transform: translateX(3px); }
+    .article-nav-title {
+      font-size: clamp(0.85rem, 1.1vw, 1rem);
+      font-weight: 400;
+      line-height: 1.45;
+      color: var(--black);
+      transition: opacity 0.2s;
+    }
+    .article-nav-item:hover .article-nav-title { opacity: 0.55; }
+    .article-nav-placeholder { flex: 1; }
+
+  </style>
+</head>
+<body>
+
+<!-- ── ARTICLE OVERLAY ── -->
+<button class="close-btn" onclick="closeArticle()">Close</button>
+<div id="article-overlay">  <div id="article-inner">
+    <div class="article-cover" id="article-cover">
+      <div class="article-cover-placeholder">Image coming soon</div>
+    </div>
+    <div class="article-meta-row">
+      <div class="article-tags" id="article-tags"><span class="article-tag">設計觀點</span></div>
+      <span class="article-date" id="article-date">2026.06.01</span>
+    </div>
+    <h1 class="article-title" id="article-title">文章標題</h1>
+    <div class="article-body" id="article-body"></div>
+    <nav class="article-nav" id="article-nav"></nav>
+  </div>
+</div>
+
+<!-- ── MAIN PAGE ── -->
+<div id="blog-page">
+
+  <!-- PAGE HEADER -->
+  <header id="blog-header">
+    <div class="blog-header-meta">
+      <span>Design Lens f/1.21</span>
+    </div>
+    <div class="blog-title-row">
+      <div class="blog-page-title-wrap"><h1 class="blog-page-title">Blog</h1></div>
+      <svg class="blog-arrow" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="12" y1="12" x2="84" y2="84" stroke="#0a0a0a" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="44" y1="84" x2="84" y2="84" stroke="#0a0a0a" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="84" y1="44" x2="84" y2="84" stroke="#0a0a0a" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </header>
+
+  <!-- TAG FILTER -->
+  <div id="tag-filter">
+    <button class="tag-btn active" data-tag="全部">全部</button>
+    <button class="tag-btn" data-tag="設計觀點">設計觀點</button>
+    <button class="tag-btn" data-tag="美感育兒">美感育兒</button>
+    <button class="tag-btn" data-tag="私人旅行座標">私人旅行座標</button>
+    <button class="tag-btn" data-tag="個人意見">個人意見</button>
+    <button class="tag-btn" data-tag="好物分享">好物分享</button>
+    <button class="tag-btn" data-tag="親子手作">親子手作</button>
+    <button class="tag-btn" data-tag="紙上好朋友">紙上好朋友</button>
+  </div>
+
+  <!-- ARTICLE LIST -->
+  <main id="blog-body">
+    <div class="blog-grid" id="blog-grid">
+
+      <!-- 文章 1 -->
+      <a class="blog-card" href="#" data-tag="紙上好朋友" data-id="0">
+        <div class="blog-img"><div class="blog-img-placeholder">Image coming soon</div></div>
+        <div class="blog-card-meta">
+          <span class="blog-card-tag">紙上好朋友</span>
+          <span class="blog-card-date">2026.06.01</span>
+        </div>
+        <p class="blog-card-title">進入40代後，我開始讀這三類書⋯</p>
+        <p class="blog-card-excerpt">關於孩子、關於自己、關於理財。從小我是個比較內向安靜的孩子，閱讀是我最好的朋友。</p>
+      </a>
+
+      <!-- 文章 2 -->
+      <a class="blog-card" href="#" data-tag="美感育兒" data-id="1">
+        <div class="blog-img"><div class="blog-img-placeholder">Image coming soon</div></div>
+        <div class="blog-card-meta">
+          <span class="blog-card-tag">美感育兒</span>
+          <span class="blog-card-date">2026.05.30</span>
+        </div>
+        <p class="blog-card-title">帶小孩看展—美術館不是大人的專利</p>
+        <p class="blog-card-excerpt">很多人覺得帶小孩去美術館很累、很麻煩，但我覺得這是最值得的週末投資之一。</p>
+      </a>
+
+      <!-- 文章 3 -->
+      <a class="blog-card" href="#" data-tag="設計觀點" data-id="2">
+        <div class="blog-img"><div class="blog-img-placeholder">Image coming soon</div></div>
+        <div class="blog-card-meta">
+          <span class="blog-card-tag">設計觀點</span>
+          <span class="blog-card-date">2026.05.22</span>
+        </div>
+        <p class="blog-card-title">設計師的色彩筆記：從生活裡提煉配色</p>
+        <p class="blog-card-excerpt">配色不是從色票開始，而是從生活觀察開始。我習慣用手機拍下讓我停下腳步的顏色組合。</p>
+      </a>
+
+      <!-- 文章 4 -->
+      <a class="blog-card" href="#" data-tag="私人旅行座標" data-id="3">
+        <div class="blog-img"><div class="blog-img-placeholder">Image coming soon</div></div>
+        <div class="blog-card-meta">
+          <span class="blog-card-tag">私人旅行座標</span>
+          <span class="blog-card-date">2026.05.10</span>
+        </div>
+        <p class="blog-card-title">京都的設計密度</p>
+        <p class="blog-card-excerpt">這座城市的厲害之處不是它保留了多少古老的東西，而是它知道哪些東西不該被替換。</p>
+      </a>
+
+      <!-- 文章 5 -->
+      <a class="blog-card" href="#" data-tag="好物分享" data-id="4">
+        <div class="blog-img"><div class="blog-img-placeholder">Image coming soon</div></div>
+        <div class="blog-card-meta">
+          <span class="blog-card-tag">好物分享</span>
+          <span class="blog-card-date">2026.04.28</span>
+        </div>
+        <p class="blog-card-title">我家的五件日常好物</p>
+        <p class="blog-card-excerpt">不是業配，是真的用了很久、每天都在用、生活裡少了會不習慣的那種。</p>
+      </a>
+
+      <!-- 文章 6 -->
+      <a class="blog-card" href="#" data-tag="親子手作" data-id="5">
+        <div class="blog-img"><div class="blog-img-placeholder">Image coming soon</div></div>
+        <div class="blog-card-meta">
+          <span class="blog-card-tag">親子手作</span>
+          <span class="blog-card-date">2026.04.15</span>
+        </div>
+        <p class="blog-card-title">和女鵝一起做的紙雕燈</p>
+        <p class="blog-card-excerpt">某個週末我們沒有特別的計畫，翻出了一些卡紙和剪刀，就這樣開始了。</p>
+      </a>
+
+      <!-- 文章 7 -->
+      <a class="blog-card" href="#" data-tag="個人意見" data-id="6">
+        <div class="blog-img"><div class="blog-img-placeholder">Image coming soon</div></div>
+        <div class="blog-card-meta">
+          <span class="blog-card-tag">個人意見</span>
+          <span class="blog-card-date">2026.03.20</span>
+        </div>
+        <p class="blog-card-title">40歲後的身體使用說明書</p>
+        <p class="blog-card-excerpt">沒有人告訴你 40 之後身體會開始有自己的意見。它會在你不注意的時候悄悄遞上一份備忘錄。</p>
+      </a>
+
+      <!-- empty state -->
+      <div id="empty-state">沒有這個分類的文章</div>
+
+    </div>
+  </main>
+
+</div>
+
+<script src="components.js"></script>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* ── 文章資料表 ── */
+const ARTICLES = [
+  {
+    tag: '紙上好朋友', secondaryTags: ['個人意見'], date: '2026.06.01',
+    title: '進入40代後，我開始讀這三類書⋯',
+    body: `<p>從小我是個比較內向安靜的孩子（哈哈，是不是覺得跟現在的我差異很大 :P）</p>
+<p>閱讀，是我最好的朋友。</p>
+<p>還記得小學時期民生社區圓環的金石堂，就是我放學或逃避最常拜訪之處。吹著涼爽冷氣，隨意取用任何想看的書，根本對當時的我可謂之「天堂」的地方！</p>
+<p>無論生活裡發生什麼，走進書店總是讓我覺得平靜。然而到了大學時代，仁愛路上 24H 誠品一直是我的安心秘密基地，當年它拆掉之前，我還特地跑去好好跟它說了謝謝和再見。</p>
+<blockquote>你雖然不見得能在實際的領域以及地理位置上認識這些人，可是你卻可以透過書本，了解他們的邏輯思想以及價值觀形成的方式。</blockquote>
+<p>心血來潮想整理一下這些年的閱讀筆記。現在大部分的書我都從圖書館借——一來不會壓縮家裡的空間，二來借書有還書的限制，比較容易驅動自己在期限內完成。</p>
+<p>我發現自己買的書很容易堆在旁邊，有一種擁有它就心安的感覺（自以為充實），然後就默默堆在旁邊，堆到最後才讀。（你也是這樣嗎？）</p>
+<h3>📖 教養｜Good Inside 教養逆思維 ／ Becky Kennedy</h3>
+<blockquote>「沒有壞行為，只有未被滿足的需求。」</blockquote>
+<p>第一次讀到這句話，我愣了很久。因為我意識到，以前對女鵝的很多反應，其實是在管理我自己的焦慮，而不是真的在理解她。</p>
+<p>這本書不教你怎麼讓孩子聽話，它要你先停下來問：她現在需要的是什麼？而我們能夠怎麼堅定且溫和引導他們。</p>
+<p>書裡說身為父母一定也會有情緒失控或受挫時，不需要追求完美的教養。向孩子坦承錯誤並進行「修復」，這反而能建立更深厚的信任感。</p>
+<h3>📖 自我｜成為自由人 ／ 李惠貞</h3>
+<blockquote>「我是誰？別做過去你以為你是的人，去做你希望你是的人。你所過的生活就是你的宣言，你的選擇在定義你。」</blockquote>
+<p>在帶領孩子的過程中開始會慢慢浮現出來的問題很難迴避：我到底是誰？不是職稱工作上的設計師，不是身為媽媽的那個角色，而是什麼才是真正的我？</p>
+<p>這本書讓我重新去想，什麼樣的生活是我真正想要的。脫掉所有標籤之後，那個剩下來的自己是什麼樣子？或許沒有立刻得到的答案，但我開始慢慢陪伴自己去思考這個問題⋯</p>
+<h3>📖 理財｜持續買進 ／ Nick Maggiulli</h3>
+<blockquote>「時間才是最重要的資產，不是選股能力。」</blockquote>
+<p>說出來有點不好意思——我是到了 40 代才驚覺自己幾乎沒在理財的人。投資小白經歷過一些挫折後，一直以為「之後再說」、「等我搞懂再開始」然後就放著了⋯</p>
+<p>這本書用淺顯易懂的說故事方式搭配數據和範例，結論也很簡單：不選股，持續買進讓時間複利做它該做的事！</p>
+<p>現在的我，除了後悔年輕時不懂，但至少已經開始跟著做了。只要開始，都不算太晚吧（希望 Q..Q）</p>
+<h3>延伸書單</h3>
+<ul class="book-list">
+  <li><span class="book-title">Good Inside 教養逆思維</span><span class="book-author">Becky Kennedy</span></li>
+  <li><span class="book-title">如何養出一個成年人</span><span class="book-author">Julie Lythcott-Haims</span></li>
+  <li><span class="book-title">成為自由人</span><span class="book-author">李惠貞</span></li>
+  <li><span class="book-title">妳想活出怎樣的人生？</span><span class="book-author">上野千鶴子</span></li>
+  <li><span class="book-title">蛤蟆先生去看心理師</span><span class="book-author">Robert de Board</span></li>
+  <li><span class="book-title">持續買進</span><span class="book-author">Nick Maggiulli</span></li>
+</ul>`
+  },
+  { tag:'美感育兒', secondaryTags:[], date:'2026.05.30', title:'帶小孩看展—美術館不是大人的專利',
+    body:'<p>很多人覺得帶小孩去美術館很累、很麻煩，但我覺得這是最值得的週末投資之一。</p><p>內容 coming soon。</p>' },
+  { tag:'設計觀點', secondaryTags:[], date:'2026.05.22', title:'設計師的色彩筆記：從生活裡提煉配色',
+    body:'<p>配色不是從色票開始，而是從生活觀察開始。</p><p>內容 coming soon。</p>' },
+  { tag:'私人旅行座標', secondaryTags:['設計觀點'], date:'2026.05.10', title:'京都的設計密度',
+    body:'<p>這座城市的厲害之處不是它保留了多少古老的東西，而是它知道哪些東西不該被替換。</p><p>內容 coming soon。</p>' },
+  { tag:'好物分享', secondaryTags:[], date:'2026.04.28', title:'我家的五件日常好物',
+    body:'<p>不是業配，是真的用了很久、每天都在用、生活裡少了會不習慣的那種。</p><p>內容 coming soon。</p>' },
+  { tag:'親子手作', secondaryTags:['美感育兒'], date:'2026.04.15', title:'和女鵝一起做的紙雕燈',
+    body:'<p>某個週末我們沒有特別的計畫，翻出了一些卡紙和剪刀，就這樣開始了。</p><p>內容 coming soon。</p>' },
+  { tag:'個人意見', secondaryTags:[], date:'2026.03.20', title:'40歲後的身體使用說明書',
+    body:'<p>沒有人告訴你 40 之後身體會開始有自己的意見。</p><p>內容 coming soon。</p>' },
+];
+
+/* ── Page entrance：對齊首頁 power4.out clip 動畫 ── */
+gsap.set('.blog-arrow', { opacity: 0, y: 12 });
+gsap.set('#tag-filter', { opacity: 0 });
+
+const ease = 'power4.out', dur = 1.0;
+gsap.to('.blog-page-title', { y: '0%', duration: 1.0, ease: 'power4.out', delay: 0.2 });
+gsap.to('.blog-arrow', { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', delay: 0.5 });
+gsap.to('#tag-filter',      { opacity: 1, duration: 0.6, ease: 'power2.out', delay: 0.55 });
+
+gsap.utils.toArray('.blog-card').forEach((card) => {
+  gsap.to(card, {
+    opacity: 1, y: 0, duration: 0.65, ease: 'power2.out',
+    scrollTrigger: { trigger: card, start: 'top 88%' }
+  });
+});
+
+/* ── Tag filter ── */
+const tagBtns = document.querySelectorAll('.tag-btn');
+const cards   = document.querySelectorAll('.blog-card');
+const empty   = document.getElementById('empty-state');
+
+tagBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    tagBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const selected = btn.dataset.tag;
+    let visible = 0;
+    cards.forEach(card => {
+      if (selected === '全部' || card.dataset.tag === selected) {
+        card.classList.remove('hidden');
+        visible++;
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+    empty.style.display = visible === 0 ? 'block' : 'none';
+  });
+});
+
+/* ── Card click → overlay ── */
+document.querySelectorAll('.blog-card').forEach(card => {
+  card.addEventListener('click', e => {
+    e.preventDefault();
+    const id = parseInt(card.dataset.id);
+    openArticle(ARTICLES[id], id);
+  });
+});
+
+function switchArticle(id) {
+  const inner = document.getElementById('article-inner');
+  inner.style.opacity = '0';
+  inner.style.transform = 'translateY(16px)';
+  setTimeout(() => {
+    document.getElementById('article-overlay').scrollTop = 0;
+    openArticle(ARTICLES[id], id);
+    inner.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+    inner.style.opacity = '1';
+    inner.style.transform = 'translateY(0)';
+    setTimeout(() => { inner.style.transition = ''; }, 400);
+  }, 200);
+}
+
+/* ── Article overlay ── */
+const articleOverlay = document.getElementById('article-overlay');
+
+function openArticle(data, id=0) {
+  const sy = window.scrollY;
+  document.body.style.top      = `-${sy}px`;
+  document.body.style.position = 'fixed';
+  document.body.style.left     = '0';
+  document.body.style.right    = '0';
+
+  const tagsEl = document.getElementById('article-tags');
+  const allTags = [data.tag, ...(data.secondaryTags || [])];
+  tagsEl.innerHTML = allTags.map((t, i) =>
+    `<span class="article-tag${i > 0 ? ' secondary' : ''}">${t}</span>`
+  ).join('');
+  document.getElementById('article-date').textContent  = data.date;
+  document.getElementById('article-title').textContent = data.title;
+  document.getElementById('article-body').innerHTML    = data.body;
+
+  // prev / next
+  const nav = document.getElementById('article-nav');
+  const idx = id;
+  const prev = idx > 0 ? ARTICLES[idx - 1] : null;
+  const next = idx < ARTICLES.length - 1 ? ARTICLES[idx + 1] : null;
+  nav.innerHTML = (prev
+    ? `<a class="article-nav-item prev" onclick="switchArticle(${idx-1})">
+        <span class="article-nav-label"><span class="article-nav-arrow">←</span> 上一篇</span>
+        <span class="article-nav-title">${prev.title}</span>
+      </a>`
+    : '<div class="article-nav-placeholder"></div>') +
+  (next
+    ? `<a class="article-nav-item next" onclick="switchArticle(${idx+1})">
+        <span class="article-nav-label">下一篇 <span class="article-nav-arrow">→</span></span>
+        <span class="article-nav-title">${next.title}</span>
+      </a>`
+    : '<div class="article-nav-placeholder"></div>');
+
+  articleOverlay.scrollTop = 0;
+  articleOverlay.classList.add('open');
+  document.body.classList.add('overlay-open');
+}
+
+function closeArticle() {
+  articleOverlay.classList.add('is-closing');
+  setTimeout(() => {
+    articleOverlay.classList.remove('open');
+    articleOverlay.classList.remove('is-closing');
+    document.body.classList.remove('overlay-open');
+    const sy = parseInt(document.body.style.top || '0') * -1;
+    document.body.style.position = '';
+    document.body.style.top      = '';
+    document.body.style.left     = '';
+    document.body.style.right    = '';
+    window.scrollTo(0, sy);
+  }, 380);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeArticle();
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Works — Amii Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --mint: #00FAB6;
+      --black: #0a0a0a;
+      --white: #fafafa;
+      --font-body: 'Poppins', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; overflow-y: scroll; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--white);
+      color: var(--black);
+      overflow-x: hidden;
+    }
+
+    /* ── PAGE LAYOUT ── */
+    #works-page {
+      padding-top: 72px;
+    }
+
+    /* ── PAGE HEADER ── */
+    #works-header {
+      padding: 48px 72px 40px;
+    }
+
+    .works-header-meta {
+      display: flex;
+      align-items: baseline;
+      gap: 32px;
+      margin-bottom: 12px;
+    }
+
+    .works-header-meta span {
+      font-size: clamp(0.8rem, 1vw, 1rem);
+      font-weight: 400;
+      line-height: 1;
+    }
+
+    .works-header-meta .dim { opacity: 0.3; }
+
+    .works-title-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .works-page-title-wrap {
+      display: inline-block;
+      overflow: hidden;
+      line-height: 0.92;
+      padding-bottom: 0.06em;
+      vertical-align: bottom;
+    }
+    .works-page-title {
+      font-size: clamp(56px, 8vw, 120px);
+      font-weight: 400;
+      line-height: 0.95;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      display: inline-block;
+      transform: translateY(110%);
+      will-change: transform;
+    }
+
+    .works-arrow {
+      width: clamp(40px, 4.5vw, 80px);
+      height: clamp(40px, 4.5vw, 80px);
+      flex-shrink: 0;
+      opacity: 0;
+      transform: translateY(10px);
+      will-change: transform, opacity;
+    }
+
+    /* ── WORKS BODY ── */
+    #works-body {
+      padding: 64px 72px 120px;
+    }
+
+    /* ── CATEGORY SECTION ── */
+    .works-category {
+      margin-bottom: 96px;
+    }
+    .works-category:last-child { margin-bottom: 0; }
+
+    .category-header {
+      margin-bottom: 28px;
+    }
+
+    .category-title {
+      font-size: clamp(1.1rem, 1.8vw, 2rem);
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: 16px;
+      opacity: 0;
+      transform: translateY(16px);
+    }
+
+    .category-title .thin {
+      font-weight: 300;
+      opacity: 0.4;
+    }
+
+    .category-divider {
+      width: 100%;
+      height: 1px;
+      background: rgba(10,10,10,0.15);
+      transform: scaleX(0);
+      transform-origin: left;
+    }
+
+    /* ── WORKS GRID ── */
+    .works-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 72px 32px;
+      margin-top: 28px;
+    }
+
+    /* ── WORK CARD ── */
+    .work-card {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(32px);
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .work-img {
+      width: 100%;
+      aspect-ratio: 864 / 546;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      background: #e0e0e0;
+    }
+
+    .work-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .work-card:hover .work-img img {
+      transform: scale(1.05);
+    }
+
+    .work-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10,10,10,0.45) 0%, transparent 55%);
+      opacity: 0;
+      transition: opacity 0.4s;
+      pointer-events: none;
+    }
+    .work-card:hover .work-img::after { opacity: 1; }
+
+    .work-img-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #e8e8e8 0%, #d8d8d8 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: rgba(10,10,10,0.22);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .work-card:hover .work-img-placeholder {
+      transform: scale(1.05);
+    }
+
+    /* ── WORK INFO ── */
+    .work-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    /* 上排：tags + year */
+    .work-info-top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    .work-tags {
+      font-size: clamp(0.75rem, 1vw, 1rem);
+      font-weight: 400;
+      color: rgba(10,10,10,0.35);
+      text-transform: capitalize;
+    }
+
+    .work-year {
+      font-size: clamp(0.75rem, 1vw, 1rem);
+      font-weight: 400;
+      color: rgba(10,10,10,0.3);
+      flex-shrink: 0;
+    }
+
+    /* 下排：arrow + name */
+    .work-name-wrap {
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* 水平箭頭 → 從左推入 */
+    .work-arrow-inline {
+      display: inline-flex;
+      align-items: center;
+      width: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: width 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  opacity 0.25s ease;
+      flex-shrink: 0;
+    }
+    .work-arrow-inline svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      margin-right: 8px;
+    }
+    .work-card:hover .work-arrow-inline {
+      width: 26px;
+      opacity: 1;
+    }
+
+    .work-name {
+      font-size: clamp(1.1rem, 1.6vw, 2rem);
+      font-weight: 400;
+      line-height: 1;
+      text-transform: capitalize;
+      letter-spacing: -0.02em;
+      color: var(--black);
+    }
+
+    /* ── DETAIL OVERLAY (方案 A) ── */
+    #work-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 400;
+      background: var(--white);
+      overflow-y: auto;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(0);
+      transition: opacity 0.38s ease, transform 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      will-change: opacity, transform;
+    }
+    #work-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateY(0);
+    }
+    #work-overlay.is-closing {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-48px);
+    }
+
+    /* ── close button ── */
+    .close-btn {
+      position: fixed;
+      top: 24px;
+      right: 68px;
+      width: 48px;
+      height: 48px;
+      display: block;
+      cursor: pointer;
+      z-index: 500;
+      opacity: 0;
+      background: none;
+      border: none;
+      padding: 0;
+      text-indent: -9999px;
+      transition: opacity 0.3s ease 0.2s;
+    }
+    .close-btn::before,
+    .close-btn::after {
+      content: '';
+      width: 100%;
+      height: 1px;
+      background: var(--black);
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transition: transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .close-btn::before { transform: rotate(-45deg); }
+    .close-btn::after  { transform: rotate(45deg); }
+    .close-btn:hover::before { transform: rotate(-225deg); }
+    .close-btn:hover::after  { transform: rotate(225deg); }
+body.overlay-open .close-btn { opacity: 1; }
+
+    #overlay-inner {
+      max-width: 740px;
+      margin: 0 auto;
+      padding: 80px 24px 120px;
+      transform: translateY(28px);
+      opacity: 0;
+      transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.06s,
+                  opacity 0.4s ease 0.06s;
+    }
+    #work-overlay.open #overlay-inner {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .overlay-main-img {
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 28px;
+      background: #e0e0e0;
+      aspect-ratio: 16/10;
+    }
+    .overlay-main-img img,
+    .overlay-main-img .work-img-placeholder {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .overlay-meta-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .overlay-tags {
+      font-size: clamp(0.75rem, 1vw, 1rem);
+      font-weight: 400;
+      color: rgba(10,10,10,0.35);
+      text-transform: capitalize;
+    }
+    .overlay-year {
+      font-size: clamp(0.75rem, 1vw, 1rem);
+      font-weight: 400;
+      color: rgba(10,10,10,0.3);
+      flex-shrink: 0;
+    }
+    .overlay-title {
+      font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      text-transform: capitalize;
+      margin-bottom: 20px;
+    }
+    .overlay-desc {
+      font-size: clamp(0.85rem, 1.1vw, 1rem);
+      font-weight: 400;
+      line-height: 1.7;
+      color: rgba(10,10,10,0.7);
+      margin-bottom: 48px;
+    }
+    .overlay-gallery {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .overlay-gallery-img {
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #e0e0e0;
+      aspect-ratio: 16/10;
+    }
+    .overlay-gallery-img img,
+    .overlay-gallery-img .work-img-placeholder {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      #works-header { padding: 40px 5% 32px; }
+      #works-body { padding: 48px 5% 80px; }
+      .works-grid { gap: 56px 24px; }
+      #overlay-close { right: 5%; }
+    }
+
+    @media (max-width: 768px) {
+      #works-header { padding: 32px 5% 28px; }
+      #works-body { padding: 36px 5% 64px; }
+      .works-header-meta { gap: 20px; }
+      .works-grid { grid-template-columns: 1fr; gap: 40px; }
+      .works-category { margin-bottom: 60px; }
+      .category-title { opacity: 1 !important; transform: none !important; }
+      .work-card { opacity: 1 !important; transform: none !important; }
+      .works-page-title { opacity: 1 !important; transform: none !important; }
+      .works-arrow { opacity: 1 !important; }
+      .category-divider { transform: scaleX(1) !important; }
+      #overlay-close { top: 16px; right: 5%; }
+      #overlay-inner { padding: 64px 0 80px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── DETAIL OVERLAY (方案 A) ── -->
+<button class="close-btn" onclick="closeOverlay()">Close</button>
+<div id="work-overlay">  <div id="overlay-inner">
+    <div class="overlay-main-img" id="overlay-main-img">
+      <div class="work-img-placeholder">Image coming soon</div>
+    </div>
+    <div class="overlay-meta-row">
+      <p class="overlay-tags" id="overlay-tags">Branding · UI/UX</p>
+      <span class="overlay-year" id="overlay-year">2026</span>
+    </div>
+    <h2 class="overlay-title" id="overlay-title">Project Name</h2>
+    <p class="overlay-desc" id="overlay-desc"></p>
+    <div class="overlay-gallery" id="overlay-gallery"></div>
+  </div>
+</div>
+
+<!-- ── MAIN PAGE ── -->
+<div id="works-page">
+
+  <header id="works-header">
+    <div class="works-header-meta">
+      <span>Selected works</span>
+      <span class="dim">2021 – 2026</span>
+    </div>
+    <div class="works-title-row">
+      <div class="works-page-title-wrap"><h1 class="works-page-title">Works</h1></div>
+      <svg class="works-arrow" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="12" y1="12" x2="84" y2="84" stroke="#0a0a0a" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="44" y1="84" x2="84" y2="84" stroke="#0a0a0a" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="84" y1="44" x2="84" y2="84" stroke="#0a0a0a" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </header>
+
+  <main id="works-body">
+
+    <section class="works-category">
+      <div class="category-header">
+        <h2 class="category-title">Website Design</h2>
+        <div class="category-divider"></div>
+      </div>
+      <div class="works-grid">
+
+        <a class="work-card" href="#" onclick="openOverlay(event, {title:'Project Name',year:'2026',tags:'Branding · UI/UX',desc:'A branding and UI/UX project. Description coming soon.',imgs:[]})">
+          <div class="work-img"><div class="work-img-placeholder">Image coming soon</div></div>
+          <div class="work-info">
+            <div class="work-info-top">
+              <span class="work-tags">Branding · UI/UX</span>
+              <span class="work-year">2026</span>
+            </div>
+            <div class="work-name-wrap">
+              <span class="work-arrow-inline"><svg viewBox="0 0 20 10" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="5" x2="16" y2="5" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round"/><polyline points="10,1 16,5 10,9" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
+              <span class="work-name">Project Name</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="work-card" href="#" onclick="openOverlay(event, {title:'Project Name',year:'2025',tags:'Website Design',desc:'Description coming soon.',imgs:[]})">
+          <div class="work-img"><div class="work-img-placeholder">Image coming soon</div></div>
+          <div class="work-info">
+            <div class="work-info-top">
+              <span class="work-tags">Website Design</span>
+              <span class="work-year">2025</span>
+            </div>
+            <div class="work-name-wrap">
+              <span class="work-arrow-inline"><svg viewBox="0 0 20 10" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="5" x2="16" y2="5" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round"/><polyline points="10,1 16,5 10,9" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
+              <span class="work-name">Project Name</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="work-card" href="#" onclick="openOverlay(event, {title:'Project Name',year:'2025',tags:'Website Design',desc:'Description coming soon.',imgs:[]})">
+          <div class="work-img"><div class="work-img-placeholder">Image coming soon</div></div>
+          <div class="work-info">
+            <div class="work-info-top">
+              <span class="work-tags">Website Design</span>
+              <span class="work-year">2025</span>
+            </div>
+            <div class="work-name-wrap">
+              <span class="work-arrow-inline"><svg viewBox="0 0 20 10" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="5" x2="16" y2="5" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round"/><polyline points="10,1 16,5 10,9" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
+              <span class="work-name">Project Name</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="work-card" href="#" onclick="openOverlay(event, {title:'Project Name',year:'2024',tags:'Visual Identity',desc:'Description coming soon.',imgs:[]})">
+          <div class="work-img"><div class="work-img-placeholder">Image coming soon</div></div>
+          <div class="work-info">
+            <div class="work-info-top">
+              <span class="work-tags">Visual Identity</span>
+              <span class="work-year">2024</span>
+            </div>
+            <div class="work-name-wrap">
+              <span class="work-arrow-inline"><svg viewBox="0 0 20 10" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="5" x2="16" y2="5" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round"/><polyline points="10,1 16,5 10,9" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
+              <span class="work-name">Project Name</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <section class="works-category">
+      <div class="category-header">
+        <h2 class="category-title">UX <span class="thin">|</span> UI Design</h2>
+        <div class="category-divider"></div>
+      </div>
+      <div class="works-grid">
+
+        <a class="work-card" href="#" onclick="openOverlay(event, {title:'Project Name',year:'2026',tags:'UX Research · UI Design',desc:'Description coming soon.',imgs:[]})">
+          <div class="work-img"><div class="work-img-placeholder">Image coming soon</div></div>
+          <div class="work-info">
+            <div class="work-info-top">
+              <span class="work-tags">UX Research · UI Design</span>
+              <span class="work-year">2026</span>
+            </div>
+            <div class="work-name-wrap">
+              <span class="work-arrow-inline"><svg viewBox="0 0 20 10" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="5" x2="16" y2="5" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round"/><polyline points="10,1 16,5 10,9" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
+              <span class="work-name">Project Name</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="work-card" href="#" onclick="openOverlay(event, {title:'Project Name',year:'2025',tags:'App Design',desc:'Description coming soon.',imgs:[]})">
+          <div class="work-img"><div class="work-img-placeholder">Image coming soon</div></div>
+          <div class="work-info">
+            <div class="work-info-top">
+              <span class="work-tags">App Design</span>
+              <span class="work-year">2025</span>
+            </div>
+            <div class="work-name-wrap">
+              <span class="work-arrow-inline"><svg viewBox="0 0 20 10" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="5" x2="16" y2="5" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round"/><polyline points="10,1 16,5 10,9" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
+              <span class="work-name">Project Name</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="work-card" href="#" onclick="openOverlay(event, {title:'Project Name',year:'2024',tags:'UI Design',desc:'Description coming soon.',imgs:[]})">
+          <div class="work-img"><div class="work-img-placeholder">Image coming soon</div></div>
+          <div class="work-info">
+            <div class="work-info-top">
+              <span class="work-tags">UI Design</span>
+              <span class="work-year">2024</span>
+            </div>
+            <div class="work-name-wrap">
+              <span class="work-arrow-inline"><svg viewBox="0 0 20 10" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="5" x2="16" y2="5" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round"/><polyline points="10,1 16,5 10,9" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
+              <span class="work-name">Project Name</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="work-card" href="#" onclick="openOverlay(event, {title:'Project Name',year:'2024',tags:'UX · Prototyping',desc:'Description coming soon.',imgs:[]})">
+          <div class="work-img"><div class="work-img-placeholder">Image coming soon</div></div>
+          <div class="work-info">
+            <div class="work-info-top">
+              <span class="work-tags">UX · Prototyping</span>
+              <span class="work-year">2024</span>
+            </div>
+            <div class="work-name-wrap">
+              <span class="work-arrow-inline"><svg viewBox="0 0 20 10" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="5" x2="16" y2="5" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round"/><polyline points="10,1 16,5 10,9" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
+              <span class="work-name">Project Name</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <section class="works-category">
+      <div class="category-header">
+        <h2 class="category-title">Visual Identity</h2>
+        <div class="category-divider"></div>
+      </div>
+      <div class="works-grid">
+
+        <a class="work-card" href="#" onclick="openOverlay(event, {title:'Project Name',year:'2025',tags:'Branding · Logo Design',desc:'Description coming soon.',imgs:[]})">
+          <div class="work-img"><div class="work-img-placeholder">Image coming soon</div></div>
+          <div class="work-info">
+            <div class="work-info-top">
+              <span class="work-tags">Branding · Logo Design</span>
+              <span class="work-year">2025</span>
+            </div>
+            <div class="work-name-wrap">
+              <span class="work-arrow-inline"><svg viewBox="0 0 20 10" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="5" x2="16" y2="5" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round"/><polyline points="10,1 16,5 10,9" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
+              <span class="work-name">Project Name</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="work-card" href="#" onclick="openOverlay(event, {title:'Project Name',year:'2023',tags:'Brand Strategy · Design',desc:'Description coming soon.',imgs:[]})">
+          <div class="work-img"><div class="work-img-placeholder">Image coming soon</div></div>
+          <div class="work-info">
+            <div class="work-info-top">
+              <span class="work-tags">Brand Strategy · Design</span>
+              <span class="work-year">2023</span>
+            </div>
+            <div class="work-name-wrap">
+              <span class="work-arrow-inline"><svg viewBox="0 0 20 10" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="5" x2="16" y2="5" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round"/><polyline points="10,1 16,5 10,9" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
+              <span class="work-name">Project Name</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- components.js 移到 body 最底，確保 DOM 已就緒 -->
+<script src="components.js"></script>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+gsap.to('.works-page-title', { y: '0%', duration: 1.0, ease: 'power4.out', delay: 0.2 });
+gsap.to('.works-arrow', { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', delay: 0.5 });
+
+gsap.utils.toArray('.category-title').forEach(el => {
+  gsap.to(el, { opacity:1, y:0, duration:0.65, ease:'power2.out',
+    scrollTrigger:{ trigger:el, start:'top 88%' } });
+});
+gsap.utils.toArray('.category-divider').forEach(el => {
+  gsap.to(el, { scaleX:1, duration:0.75, ease:'power2.inOut',
+    scrollTrigger:{ trigger:el, start:'top 90%' } });
+});
+gsap.utils.toArray('.works-grid').forEach(grid => {
+  gsap.to(grid.querySelectorAll('.work-card'), {
+    opacity:1, y:0, duration:0.7, ease:'power2.out', stagger:0.1,
+    scrollTrigger:{ trigger:grid, start:'top 82%' }
+  });
+});
+
+/* ── Overlay ── */
+const overlay = document.getElementById('work-overlay');
+function openOverlay(e, data) {
+  e.preventDefault();
+  const sy = window.scrollY;
+  document.body.style.top = `-${sy}px`;
+  document.body.style.position = 'fixed';
+  document.body.style.left = '0';
+  document.body.style.right = '0';
+
+  // 填入內容
+  const titleEl = document.getElementById('overlay-title');
+  titleEl.textContent = data.title;
+  document.getElementById('overlay-year').textContent  = data.year;
+  document.getElementById('overlay-tags').textContent  = data.tags;
+  document.getElementById('overlay-desc').textContent  = data.desc;
+
+  // gallery
+  const gallery = document.getElementById('overlay-gallery');
+  gallery.innerHTML = '';
+  if (data.imgs && data.imgs.length) {
+    data.imgs.forEach(src => {
+      const d = document.createElement('div');
+      d.className = 'overlay-gallery-img';
+      const img = document.createElement('img');
+      img.src = src; img.alt = '';
+      d.appendChild(img);
+      gallery.appendChild(d);
+    });
+  } else {
+    // placeholder gallery 示意
+    for (let i = 0; i < 3; i++) {
+      const d = document.createElement('div');
+      d.className = 'overlay-gallery-img';
+      d.innerHTML = '<div class="work-img-placeholder">Image coming soon</div>';
+      gallery.appendChild(d);
+    }
+  }
+
+  overlay.scrollTop = 0;
+  overlay.classList.add('open');
+  document.body.classList.add('overlay-open');
+}
+
+function closeOverlay() {
+  overlay.classList.add('is-closing');
+  setTimeout(() => {
+    overlay.classList.remove('open');
+    overlay.classList.remove('is-closing');
+    document.body.classList.remove('overlay-open');
+    const sy = parseInt(document.body.style.top || '0') * -1;
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    window.scrollTo(0, sy);
+  }, 380);
+}
+
+// ESC 關閉
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeOverlay();
+});
+</script>
+
+</body>
+</html>
