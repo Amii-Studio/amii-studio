@@ -995,39 +995,89 @@ body{background:var(--white);color:var(--black);overflow-x:hidden;}
     </div>
     <a href="blog.html" class="see-all-link" data-en="See all articles" data-zh="所有文章">See all articles</a>
   </div>
-  <div class="blog-grid">
+  <div class="blog-grid" id="home-blog-grid">
     <div class="blog-item reveal">
       <div class="blog-img-wrap">
         <div class="blog-img-inner"><span class="blog-placeholder-label">IMAGE PLACEHOLDER</span></div>
       </div>
       <div class="blog-card-meta">
-        <span class="blog-date-tag">美感育兒</span>
-        <p class="blog-post-date">2026.05.30</p>
+        <span class="blog-date-tag"></span>
+        <p class="blog-post-date"></p>
       </div>
-      <p class="blog-post-title">帶小孩看展—美術館不是大人的專利</p>
+      <p class="blog-post-title"></p>
     </div>
     <div class="blog-item reveal">
       <div class="blog-img-wrap">
         <div class="blog-img-inner"><span class="blog-placeholder-label">IMAGE PLACEHOLDER</span></div>
       </div>
       <div class="blog-card-meta">
-        <span class="blog-date-tag">設計視角</span>
-        <p class="blog-post-date">2026.05.22</p>
+        <span class="blog-date-tag"></span>
+        <p class="blog-post-date"></p>
       </div>
-      <p class="blog-post-title">設計師的色彩筆記：從生活裡提煉配色</p>
+      <p class="blog-post-title"></p>
     </div>
     <div class="blog-item reveal">
       <div class="blog-img-wrap">
         <div class="blog-img-inner"><span class="blog-placeholder-label">IMAGE PLACEHOLDER</span></div>
       </div>
       <div class="blog-card-meta">
-        <span class="blog-date-tag">紙上好朋友</span>
-        <p class="blog-post-date">2026.06.01</p>
+        <span class="blog-date-tag"></span>
+        <p class="blog-post-date"></p>
       </div>
-      <p class="blog-post-title">進入40代後，我開始讀這三類書⋯</p>
+      <p class="blog-post-title"></p>
     </div>
   </div>
 </section>
+
+<script>
+(function () {
+  function formatHomeDate(iso) {
+    if (!iso) return '';
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) return iso;
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}.${m}.${day}`;
+  }
+
+  fetch('/api/posts')
+    .then(res => res.json())
+    .then(data => {
+      const posts = (data.posts || data.results || (Array.isArray(data) ? data : [])).slice(0, 3);
+      if (!posts.length) return;
+
+      const items = document.querySelectorAll('#home-blog-grid .blog-item');
+      posts.forEach((post, i) => {
+        const item = items[i];
+        if (!item) return;
+
+        const imgWrap = item.querySelector('.blog-img-wrap');
+        if (post.coverImage) {
+          imgWrap.innerHTML = `<div class="blog-img-inner"><img src="${post.coverImage}" alt="${post.title || ''}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;"></div>`;
+        }
+
+        const tagEl   = item.querySelector('.blog-date-tag');
+        const dateEl  = item.querySelector('.blog-post-date');
+        const titleEl = item.querySelector('.blog-post-title');
+        if (tagEl)   tagEl.textContent   = post.mainTag || '';
+        if (dateEl)  dateEl.textContent  = formatHomeDate(post.publishDate);
+        if (titleEl) titleEl.textContent = post.title || '';
+
+        item.style.cursor = 'pointer';
+        item.addEventListener('click', () => {
+          window.location.href = `blog.html?id=${i}`;
+        });
+      });
+
+      // 隱藏多餘的佔位卡片（若文章數不足 3 篇）
+      for (let i = posts.length; i < items.length; i++) {
+        items[i].style.display = 'none';
+      }
+    })
+    .catch(err => console.error('Failed to load latest posts:', err));
+})();
+</script>
 
 <!-- ══ SAY HELLO ══ -->
 <section id="contact-section">

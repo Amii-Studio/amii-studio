@@ -686,6 +686,13 @@ async function fetchPosts() {
     bindTagFilter();
     bindCardClicks();
 
+    // 支援從首頁帶 ?id=N 連結直接開啟對應文章
+    const params = new URLSearchParams(location.search);
+    const deepLinkId = parseInt(params.get('id'), 10);
+    if (!isNaN(deepLinkId) && ARTICLES[deepLinkId]) {
+      setTimeout(() => openArticle(ARTICLES[deepLinkId], deepLinkId), 300);
+    }
+
   } catch (err) {
     console.error('Failed to fetch posts:', err);
     loading.textContent = '文章載入失敗，請重新整理頁面';
