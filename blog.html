@@ -540,87 +540,10 @@ body.overlay-open .close-btn { opacity: 1; }
   <!-- ARTICLE LIST -->
   <main id="blog-body">
     <div class="blog-grid" id="blog-grid">
-
-      <!-- 文章 1 -->
-      <a class="blog-card" href="#" data-tag="紙上好朋友" data-id="0">
-        <div class="blog-img"><div class="blog-img-placeholder">Image coming soon</div></div>
-        <div class="blog-card-meta">
-          <span class="blog-card-tag">紙上好朋友</span>
-          <span class="blog-card-date">2026.06.01</span>
-        </div>
-        <p class="blog-card-title">進入40代後，我開始讀這三類書⋯</p>
-        <p class="blog-card-excerpt">關於孩子、關於自己、關於理財。從小我是個比較內向安靜的孩子，閱讀是我最好的朋友。</p>
-      </a>
-
-      <!-- 文章 2 -->
-      <a class="blog-card" href="#" data-tag="美感育兒" data-id="1">
-        <div class="blog-img"><div class="blog-img-placeholder">Image coming soon</div></div>
-        <div class="blog-card-meta">
-          <span class="blog-card-tag">美感育兒</span>
-          <span class="blog-card-date">2026.05.30</span>
-        </div>
-        <p class="blog-card-title">帶小孩看展—美術館不是大人的專利</p>
-        <p class="blog-card-excerpt">很多人覺得帶小孩去美術館很累、很麻煩，但我覺得這是最值得的週末投資之一。</p>
-      </a>
-
-      <!-- 文章 3 -->
-      <a class="blog-card" href="#" data-tag="設計觀點" data-id="2">
-        <div class="blog-img"><div class="blog-img-placeholder">Image coming soon</div></div>
-        <div class="blog-card-meta">
-          <span class="blog-card-tag">設計觀點</span>
-          <span class="blog-card-date">2026.05.22</span>
-        </div>
-        <p class="blog-card-title">設計師的色彩筆記：從生活裡提煉配色</p>
-        <p class="blog-card-excerpt">配色不是從色票開始，而是從生活觀察開始。我習慣用手機拍下讓我停下腳步的顏色組合。</p>
-      </a>
-
-      <!-- 文章 4 -->
-      <a class="blog-card" href="#" data-tag="私人旅行座標" data-id="3">
-        <div class="blog-img"><div class="blog-img-placeholder">Image coming soon</div></div>
-        <div class="blog-card-meta">
-          <span class="blog-card-tag">私人旅行座標</span>
-          <span class="blog-card-date">2026.05.10</span>
-        </div>
-        <p class="blog-card-title">京都的設計密度</p>
-        <p class="blog-card-excerpt">這座城市的厲害之處不是它保留了多少古老的東西，而是它知道哪些東西不該被替換。</p>
-      </a>
-
-      <!-- 文章 5 -->
-      <a class="blog-card" href="#" data-tag="好物分享" data-id="4">
-        <div class="blog-img"><div class="blog-img-placeholder">Image coming soon</div></div>
-        <div class="blog-card-meta">
-          <span class="blog-card-tag">好物分享</span>
-          <span class="blog-card-date">2026.04.28</span>
-        </div>
-        <p class="blog-card-title">我家的五件日常好物</p>
-        <p class="blog-card-excerpt">不是業配，是真的用了很久、每天都在用、生活裡少了會不習慣的那種。</p>
-      </a>
-
-      <!-- 文章 6 -->
-      <a class="blog-card" href="#" data-tag="親子手作" data-id="5">
-        <div class="blog-img"><div class="blog-img-placeholder">Image coming soon</div></div>
-        <div class="blog-card-meta">
-          <span class="blog-card-tag">親子手作</span>
-          <span class="blog-card-date">2026.04.15</span>
-        </div>
-        <p class="blog-card-title">和女鵝一起做的紙雕燈</p>
-        <p class="blog-card-excerpt">某個週末我們沒有特別的計畫，翻出了一些卡紙和剪刀，就這樣開始了。</p>
-      </a>
-
-      <!-- 文章 7 -->
-      <a class="blog-card" href="#" data-tag="個人意見" data-id="6">
-        <div class="blog-img"><div class="blog-img-placeholder">Image coming soon</div></div>
-        <div class="blog-card-meta">
-          <span class="blog-card-tag">個人意見</span>
-          <span class="blog-card-date">2026.03.20</span>
-        </div>
-        <p class="blog-card-title">40歲後的身體使用說明書</p>
-        <p class="blog-card-excerpt">沒有人告訴你 40 之後身體會開始有自己的意見。它會在你不注意的時候悄悄遞上一份備忘錄。</p>
-      </a>
-
+      <!-- 動態由 JS 產生 -->
+      <div id="loading-state" style="grid-column:1/-1;padding:80px 0;text-align:center;font-size:0.85rem;color:rgba(10,10,10,0.3);font-weight:300;letter-spacing:0.06em;">Loading</div>
       <!-- empty state -->
       <div id="empty-state">沒有這個分類的文章</div>
-
     </div>
   </main>
 
@@ -631,103 +554,137 @@ body.overlay-open .close-btn { opacity: 1; }
 <script>
 gsap.registerPlugin(ScrollTrigger);
 
-/* ── 文章資料表 ── */
-const ARTICLES = [
-  {
-    tag: '紙上好朋友', secondaryTags: ['個人意見'], date: '2026.06.01',
-    title: '進入40代後，我開始讀這三類書⋯',
-    body: `<p>從小我是個比較內向安靜的孩子（哈哈，是不是覺得跟現在的我差異很大 :P）</p>
-<p>閱讀，是我最好的朋友。</p>
-<p>還記得小學時期民生社區圓環的金石堂，就是我放學或逃避最常拜訪之處。吹著涼爽冷氣，隨意取用任何想看的書，根本對當時的我可謂之「天堂」的地方！</p>
-<p>無論生活裡發生什麼，走進書店總是讓我覺得平靜。然而到了大學時代，仁愛路上 24H 誠品一直是我的安心秘密基地，當年它拆掉之前，我還特地跑去好好跟它說了謝謝和再見。</p>
-<blockquote>你雖然不見得能在實際的領域以及地理位置上認識這些人，可是你卻可以透過書本，了解他們的邏輯思想以及價值觀形成的方式。</blockquote>
-<p>心血來潮想整理一下這些年的閱讀筆記。現在大部分的書我都從圖書館借——一來不會壓縮家裡的空間，二來借書有還書的限制，比較容易驅動自己在期限內完成。</p>
-<p>我發現自己買的書很容易堆在旁邊，有一種擁有它就心安的感覺（自以為充實），然後就默默堆在旁邊，堆到最後才讀。（你也是這樣嗎？）</p>
-<h3>📖 教養｜Good Inside 教養逆思維 ／ Becky Kennedy</h3>
-<blockquote>「沒有壞行為，只有未被滿足的需求。」</blockquote>
-<p>第一次讀到這句話，我愣了很久。因為我意識到，以前對女鵝的很多反應，其實是在管理我自己的焦慮，而不是真的在理解她。</p>
-<p>這本書不教你怎麼讓孩子聽話，它要你先停下來問：她現在需要的是什麼？而我們能夠怎麼堅定且溫和引導他們。</p>
-<p>書裡說身為父母一定也會有情緒失控或受挫時，不需要追求完美的教養。向孩子坦承錯誤並進行「修復」，這反而能建立更深厚的信任感。</p>
-<h3>📖 自我｜成為自由人 ／ 李惠貞</h3>
-<blockquote>「我是誰？別做過去你以為你是的人，去做你希望你是的人。你所過的生活就是你的宣言，你的選擇在定義你。」</blockquote>
-<p>在帶領孩子的過程中開始會慢慢浮現出來的問題很難迴避：我到底是誰？不是職稱工作上的設計師，不是身為媽媽的那個角色，而是什麼才是真正的我？</p>
-<p>這本書讓我重新去想，什麼樣的生活是我真正想要的。脫掉所有標籤之後，那個剩下來的自己是什麼樣子？或許沒有立刻得到的答案，但我開始慢慢陪伴自己去思考這個問題⋯</p>
-<h3>📖 理財｜持續買進 ／ Nick Maggiulli</h3>
-<blockquote>「時間才是最重要的資產，不是選股能力。」</blockquote>
-<p>說出來有點不好意思——我是到了 40 代才驚覺自己幾乎沒在理財的人。投資小白經歷過一些挫折後，一直以為「之後再說」、「等我搞懂再開始」然後就放著了⋯</p>
-<p>這本書用淺顯易懂的說故事方式搭配數據和範例，結論也很簡單：不選股，持續買進讓時間複利做它該做的事！</p>
-<p>現在的我，除了後悔年輕時不懂，但至少已經開始跟著做了。只要開始，都不算太晚吧（希望 Q..Q）</p>
-<h3>延伸書單</h3>
-<ul class="book-list">
-  <li><span class="book-title">Good Inside 教養逆思維</span><span class="book-author">Becky Kennedy</span></li>
-  <li><span class="book-title">如何養出一個成年人</span><span class="book-author">Julie Lythcott-Haims</span></li>
-  <li><span class="book-title">成為自由人</span><span class="book-author">李惠貞</span></li>
-  <li><span class="book-title">妳想活出怎樣的人生？</span><span class="book-author">上野千鶴子</span></li>
-  <li><span class="book-title">蛤蟆先生去看心理師</span><span class="book-author">Robert de Board</span></li>
-  <li><span class="book-title">持續買進</span><span class="book-author">Nick Maggiulli</span></li>
-</ul>`
-  },
-  { tag:'美感育兒', secondaryTags:[], date:'2026.05.30', title:'帶小孩看展—美術館不是大人的專利',
-    body:'<p>很多人覺得帶小孩去美術館很累、很麻煩，但我覺得這是最值得的週末投資之一。</p><p>內容 coming soon。</p>' },
-  { tag:'設計觀點', secondaryTags:[], date:'2026.05.22', title:'設計師的色彩筆記：從生活裡提煉配色',
-    body:'<p>配色不是從色票開始，而是從生活觀察開始。</p><p>內容 coming soon。</p>' },
-  { tag:'私人旅行座標', secondaryTags:['設計觀點'], date:'2026.05.10', title:'京都的設計密度',
-    body:'<p>這座城市的厲害之處不是它保留了多少古老的東西，而是它知道哪些東西不該被替換。</p><p>內容 coming soon。</p>' },
-  { tag:'好物分享', secondaryTags:[], date:'2026.04.28', title:'我家的五件日常好物',
-    body:'<p>不是業配，是真的用了很久、每天都在用、生活裡少了會不習慣的那種。</p><p>內容 coming soon。</p>' },
-  { tag:'親子手作', secondaryTags:['美感育兒'], date:'2026.04.15', title:'和女鵝一起做的紙雕燈',
-    body:'<p>某個週末我們沒有特別的計畫，翻出了一些卡紙和剪刀，就這樣開始了。</p><p>內容 coming soon。</p>' },
-  { tag:'個人意見', secondaryTags:[], date:'2026.03.20', title:'40歲後的身體使用說明書',
-    body:'<p>沒有人告訴你 40 之後身體會開始有自己的意見。</p><p>內容 coming soon。</p>' },
-];
-
-/* ── Page entrance：對齊首頁 power4.out clip 動畫 ── */
+/* ── Page entrance animations（不依賴卡片，先跑） ── */
 gsap.set('.blog-arrow', { opacity: 0, y: 12 });
 gsap.set('#tag-filter', { opacity: 0 });
-
-const ease = 'power4.out', dur = 1.0;
 gsap.to('.blog-page-title', { y: '0%', duration: 1.0, ease: 'power4.out', delay: 0.2 });
-gsap.to('.blog-arrow', { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', delay: 0.5 });
+gsap.to('.blog-arrow',      { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', delay: 0.5 });
 gsap.to('#tag-filter',      { opacity: 1, duration: 0.6, ease: 'power2.out', delay: 0.55 });
 
-gsap.utils.toArray('.blog-card').forEach((card) => {
-  gsap.to(card, {
-    opacity: 1, y: 0, duration: 0.65, ease: 'power2.out',
-    scrollTrigger: { trigger: card, start: 'top 88%' }
-  });
-});
+/* ── 全域文章資料（從 API 填入） ── */
+let ARTICLES = [];
 
-/* ── Tag filter ── */
-const tagBtns = document.querySelectorAll('.tag-btn');
-const cards   = document.querySelectorAll('.blog-card');
-const empty   = document.getElementById('empty-state');
+/* ── 日期格式化：ISO → YYYY.MM.DD ── */
+function formatDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (isNaN(d)) return iso;
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}.${m}.${day}`;
+}
 
-tagBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    tagBtns.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    const selected = btn.dataset.tag;
-    let visible = 0;
-    cards.forEach(card => {
-      if (selected === '全部' || card.dataset.tag === selected) {
-        card.classList.remove('hidden');
-        visible++;
-      } else {
-        card.classList.add('hidden');
-      }
+/* ── 動態產生卡片 HTML ── */
+function createCardHTML(article, idx) {
+  const imgHTML = article.coverImage
+    ? `<img src="${article.coverImage}" alt="${article.title}" loading="lazy">`
+    : `<div class="blog-img-placeholder">Image coming soon</div>`;
+  const excerpt = article.summary || article.excerpt || '';
+  const primaryTag = article.mainTag || article.primaryTag || '';
+  return `
+    <a class="blog-card" href="#" data-tag="${primaryTag}" data-id="${idx}">
+      <div class="blog-img">${imgHTML}</div>
+      <div class="blog-card-meta">
+        <span class="blog-card-tag">${primaryTag}</span>
+        <span class="blog-card-date">${formatDate(article.publishDate)}</span>
+      </div>
+      <p class="blog-card-title">${article.title}</p>
+      ${excerpt ? `<p class="blog-card-excerpt">${excerpt}</p>` : ''}
+    </a>`;
+}
+
+/* ── 卡片動畫（render 後觸發） ── */
+function animateCards() {
+  gsap.utils.toArray('.blog-card').forEach((card) => {
+    gsap.to(card, {
+      opacity: 1, y: 0, duration: 0.65, ease: 'power2.out',
+      scrollTrigger: { trigger: card, start: 'top 88%' }
     });
-    empty.style.display = visible === 0 ? 'block' : 'none';
   });
-});
+}
 
-/* ── Card click → overlay ── */
-document.querySelectorAll('.blog-card').forEach(card => {
-  card.addEventListener('click', e => {
-    e.preventDefault();
-    const id = parseInt(card.dataset.id);
-    openArticle(ARTICLES[id], id);
+/* ── Tag filter 綁定（render 後呼叫） ── */
+function bindTagFilter() {
+  const tagBtns = document.querySelectorAll('.tag-btn');
+  const empty   = document.getElementById('empty-state');
+
+  tagBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tagBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const selected = btn.dataset.tag;
+      let visible = 0;
+      document.querySelectorAll('.blog-card').forEach(card => {
+        if (selected === '全部' || card.dataset.tag === selected) {
+          card.classList.remove('hidden');
+          visible++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+      empty.style.display = visible === 0 ? 'block' : 'none';
+    });
   });
-});
+}
+
+/* ── Card click 綁定（render 後呼叫） ── */
+function bindCardClicks() {
+  document.querySelectorAll('.blog-card').forEach(card => {
+    card.addEventListener('click', e => {
+      e.preventDefault();
+      const id = parseInt(card.dataset.id);
+      openArticle(ARTICLES[id], id);
+    });
+  });
+}
+
+/* ── Fetch Notion API ── */
+async function fetchPosts() {
+  const grid    = document.getElementById('blog-grid');
+  const loading = document.getElementById('loading-state');
+  const empty   = document.getElementById('empty-state');
+
+  try {
+    const res  = await fetch('/api/posts');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+
+    // data 預期為陣列，每筆含：title, excerpt, primaryTag, secondaryTags, publishDate, coverImage
+    ARTICLES = Array.isArray(data) ? data : (data.posts || data.results || []);
+
+    if (ARTICLES.length === 0) {
+      loading.style.display = 'none';
+      empty.style.display   = 'block';
+      return;
+    }
+
+    // 產生卡片 HTML
+    const cardsHTML = ARTICLES.map((a, i) => createCardHTML(a, i)).join('');
+    loading.remove();
+    // 把卡片插到 empty-state 之前
+    empty.insertAdjacentHTML('beforebegin', cardsHTML);
+
+    // mobile：關掉動畫（同原本 CSS @media 行為）
+    if (window.innerWidth <= 768) {
+      document.querySelectorAll('.blog-card').forEach(c => {
+        c.style.opacity = '1';
+        c.style.transform = 'none';
+      });
+    }
+
+    animateCards();
+    bindTagFilter();
+    bindCardClicks();
+
+  } catch (err) {
+    console.error('Failed to fetch posts:', err);
+    loading.textContent = '文章載入失敗，請重新整理頁面';
+    loading.style.color = 'rgba(10,10,10,0.4)';
+  }
+}
+
+fetchPosts();
 
 function switchArticle(id) {
   const inner = document.getElementById('article-inner');
@@ -753,14 +710,24 @@ function openArticle(data, id=0) {
   document.body.style.left     = '0';
   document.body.style.right    = '0';
 
-  const tagsEl = document.getElementById('article-tags');
-  const allTags = [data.tag, ...(data.secondaryTags || [])];
+  // 封面圖
+  const coverEl = document.getElementById('article-cover');
+  if (data.coverImage) {
+    coverEl.innerHTML = `<img src="${data.coverImage}" alt="${data.title}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
+  } else {
+    coverEl.innerHTML = `<div class="article-cover-placeholder">Image coming soon</div>`;
+  }
+
+  const tagsEl  = document.getElementById('article-tags');
+  const primaryTag = data.mainTag || data.primaryTag || '';
+  const subTags    = data.subTags || data.secondaryTags || [];
+  const allTags    = [primaryTag, ...subTags].filter(Boolean);
   tagsEl.innerHTML = allTags.map((t, i) =>
     `<span class="article-tag${i > 0 ? ' secondary' : ''}">${t}</span>`
   ).join('');
-  document.getElementById('article-date').textContent  = data.date;
+  document.getElementById('article-date').textContent  = formatDate(data.publishDate);
   document.getElementById('article-title').textContent = data.title;
-  document.getElementById('article-body').innerHTML    = data.body;
+  document.getElementById('article-body').innerHTML    = data.content || data.body || '';
 
   // prev / next
   const nav = document.getElementById('article-nav');
