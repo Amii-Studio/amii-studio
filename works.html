@@ -293,11 +293,15 @@
       border: none;
       padding: 0;
       opacity: 0;
+      pointer-events: none;
       transition: opacity 0.3s ease 0.2s;
       overflow: hidden;
       font-size: 0;
       color: transparent;
       -webkit-tap-highlight-color: transparent;
+    }
+    #overlay-close.visible {
+      pointer-events: auto;
     }
     #overlay-close::before,
     #overlay-close::after {
