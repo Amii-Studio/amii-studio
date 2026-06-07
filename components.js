@@ -338,11 +338,11 @@
       position:relative;background:#0a0a0a;z-index:20;
     }
     .footer-inner{
-      padding:40px 72px;display:flex;flex-direction:column;gap:8px;
+      padding:40px 72px;display:flex;flex-direction:column;gap:16px;
       max-width:1534px;margin:0 auto;width:100%;
     }
     .footer-row{display:flex;align-items:center;justify-content:space-between;width:100%;}
-    .footer-left-group{display:flex;align-items:center;gap:16px;}
+    .footer-left-group{display:flex;align-items:center;gap:20px;}
     .footer-sep{color:rgba(255,255,255,0.3);font-size:14px;font-weight:300;}
     .footer-logo-link{display:block;}
     .footer-logo-white{display:block;height:13px;width:auto;}
@@ -458,7 +458,7 @@
     .footer-socials a:hover{opacity:0.6;}
     .footer-socials svg{height:26px;width:auto;display:block;}
     .privacy-link{
-      font-family:'Poppins',sans-serif;font-size:12px;font-weight:400;
+      font-family:'Poppins',sans-serif;font-size:13px;font-weight:400;
       color:rgba(255,255,255,0.6);text-decoration:underline;
       text-underline-offset:3px;text-decoration-color:rgba(255,255,255,0.3);
       transition:color 0.2s,text-decoration-color 0.2s;
@@ -492,16 +492,16 @@
       }
       /* Logo 縮小 */
       .footer-logo-link svg{
-        height:10px !important;
+        height:14px !important;
         width:auto !important;
       }
-      .footer-sep{ font-size:11px; }
+      .footer-sep{ font-size:12px; }
       /* privacy / copyright 不折行 */
       .privacy-link{
-        font-size:10px !important;
+        font-size:12px !important;
         white-space:nowrap;
       }
-      .footer-copy{ font-size:10px; }
+      .footer-copy{ font-size:11px; }
       /* socials 在 logo 下方，左對齊 */
       .footer-socials{
         gap:16px;
@@ -509,7 +509,8 @@
         align-items:center;
         margin-left:0;
       }
-      .footer-socials svg{ height:18px; }
+      .footer-socials a{ min-width:36px; min-height:36px; }
+      .footer-socials svg{ height:22px; }
     }
   `;
   document.head.appendChild(style);
