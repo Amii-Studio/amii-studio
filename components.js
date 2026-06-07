@@ -7,8 +7,8 @@
 (function () {
 
   /* ── 判斷目前頁面，設定 active nav link ── */
-  const page = location.pathname.split('/').pop() || 'index.html';
-  const isHome = page === 'index.html' || page === '';
+  const page = location.pathname.split('/').pop() || 'index_15.html';
+  const isHome = page === 'index_15.html' || page === '' || page === 'index.html';
 
   /* ── Nav HTML ── */
   const LOGO_SVG = `<svg width="173" height="20" viewBox="0 0 173 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -27,11 +27,11 @@
 
   /* Nav 連結定義 */
   const NAV_LINKS = [
-    { label: 'Home',    labelZh: '首頁', href: 'index.html',  key: 'home'    },
+    { label: 'Home',    labelZh: '首頁', href: 'index_15.html',  key: 'home'    },
     { label: 'About',   labelZh: '關於', href: 'about.html', key: 'about'   },
     { label: 'Works',   labelZh: '作品', href: 'works.html',     key: 'works'   },
     { label: 'Blog',    labelZh: 'Blog', href: 'blog.html',      key: 'blog'    },
-    { label: 'Contact', labelZh: '聯絡', href: 'index.html#contact-section', key: 'contact' },
+    { label: 'Contact', labelZh: '聯絡', href: 'index_15.html#contact-section', key: 'contact' },
   ];
 
   /* 目前頁面對應 key */
@@ -53,7 +53,7 @@
   const nav = document.createElement('nav');
   nav.id = 'nav';
   nav.innerHTML = `
-    <a id="logo" href="index.html">${LOGO_SVG}</a>
+    <a id="logo" href="index_15.html">${LOGO_SVG}</a>
     <ul id="nav-links">${navLinksHTML}</ul>
     <div style="display:flex;align-items:center;gap:12px;">
       <button id="hamburger" aria-label="Menu" style="display:none;">
@@ -79,7 +79,7 @@
     <div class="footer-inner">
       <div class="footer-row">
         <div class="footer-left-group">
-          <a href="index.html" class="footer-logo-link">${LOGO_SVG_WHITE}</a>
+          <a href="index_15.html" class="footer-logo-link">${LOGO_SVG_WHITE}</a>
           <span class="footer-sep">|</span>
           <a href="#" class="privacy-link" data-en="Privacy Policy" data-zh="隱私權政策" onclick="document.getElementById('privacy-dialog').showModal();return false;">Privacy Policy</a>
           <span class="footer-sep">|</span>
@@ -462,8 +462,49 @@
       #nav{padding:0 5%;height:56px;}
       #nav-links{display:none;}
       #hamburger{display:flex!important;}
-      .footer-inner{padding:24px 5%;}
-      .footer-row{flex-direction:column;align-items:flex-start;gap:16px;}
+
+      /* Footer mobile */
+      #footer{ background:#000 !important; margin-top:0 !important; }
+      .footer-inner{
+        padding:20px 5%;
+        display:flex;flex-direction:column;
+        gap:10px;
+      }
+      .footer-row{
+        flex-direction:row;
+        align-items:center;
+        justify-content:space-between;
+        flex-wrap:nowrap;
+        gap:8px;
+        width:100%;
+      }
+      .footer-left-group{
+        display:flex;align-items:center;
+        gap:8px;
+        flex-wrap:nowrap;
+        flex-shrink:1;
+        min-width:0;
+      }
+      /* Logo 縮小 */
+      .footer-logo-link svg{
+        height:10px !important;
+        width:auto !important;
+      }
+      .footer-sep{ font-size:11px; }
+      /* privacy / copyright 不折行 */
+      .privacy-link{
+        font-size:10px !important;
+        white-space:nowrap;
+      }
+      .footer-copy{ font-size:10px; }
+      .footer-socials{ gap:12px; }
+      .footer-socials svg{ height:18px; }
+
+      /* Works / Blog 內頁左右 padding 24px */
+      #works-body,
+      #blog-body,
+      .works-category,
+      .blog-category{ padding-left:24px !important; padding-right:24px !important; }
     }
   `;
   document.head.appendChild(style);

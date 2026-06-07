@@ -133,12 +133,12 @@ html,body{width:100%;height:100%;background:var(--white);overflow:hidden;font-fa
 .title-arrow svg{width:100%;height:100%;}
 .about-tagline{font-size:clamp(.95rem,1.8vw,2rem);font-weight:300;line-height:1.5;color:rgba(10,10,10,.82);max-width:48%;margin-bottom:clamp(16px,2.5vh,32px);}
 .about-tagline strong{font-weight:600;color:var(--black);}
-.stats-row{display:flex;gap:clamp(18px,4vw,56px);margin-bottom:clamp(16px,2.5vh,32px);align-items:baseline;}
+.stats-row{display:flex;gap:clamp(18px,4vw,56px);margin-bottom:clamp(16px,2.5vh,32px);align-items:center;}
 .stat-n,.stat-inf{font-size:clamp(1.6rem,2.8vw,3.2rem);font-weight:500;line-height:1;display:block;color:var(--black);}
-.stat-inf{font-weight:500;font-size:clamp(1.6rem,2.8vw,3.2rem) !important;}
-.stat-l{font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:rgba(10,10,10,.35);display:block;margin-top:4px;}
+.stat-inf{font-weight:500;font-size:clamp(1rem,1.8vw,2.2rem) !important;}
+.stat-l{font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:rgba(10,10,10,.35);display:block;margin-top:4px;vertical-align:top;}
 .services-list{list-style:none;}
-.services-list li{font-size:clamp(1rem,1.85vw,2.1rem);font-weight:200;letter-spacing:-.01em;text-transform:uppercase;line-height:1.38;color:var(--black);}
+.services-list li{font-size:clamp(1rem,1.85vw,2.375rem);font-weight:500;letter-spacing:-.01em;text-transform:uppercase;line-height:1.38;color:var(--black);}
 .services-list li .thin{font-weight:300;}
 
 /* Blob area at bottom of intro */
@@ -214,6 +214,7 @@ html,body{width:100%;height:100%;background:var(--white);overflow:hidden;font-fa
   text-align:center;
 }
 .convo-answer strong{font-weight:600;color:var(--black);}
+.convo-answer .block-strong{display:block;margin-top:.4em;}
 #convo-arrow{
   margin-top:clamp(12px,2vh,22px);
   display:flex;flex-direction:column;align-items:center;gap:5px;
@@ -378,8 +379,10 @@ html,body{width:100%;height:100%;background:var(--white);overflow:hidden;font-fa
   .about-label{margin-bottom:4px;padding-top:6px;}
   .about-title{font-size:clamp(2.2rem,11vw,3.2rem);margin-bottom:6px;}
   .about-tagline{max-width:100%;font-size:clamp(.8rem,3.6vw,.92rem);margin-bottom:8px;}
-  .stats-row{gap:clamp(12px,4.5vw,28px);margin-bottom:8px;}
+  .stats-row{gap:clamp(12px,4.5vw,28px);margin-bottom:8px;align-items:center;}
   .stat-n,.stat-inf{font-size:clamp(1.1rem,5vw,1.6rem);}
+  .stat-inf{font-size:clamp(.65rem,2.8vw,.85rem) !important;}
+  .services-list li{font-size:1.25rem;font-weight:500;}
   #screen-intro > ul.services-list{
     position:absolute;
     top:calc(12px + min(72vw,300px) * 1.333 * 0.42 + 190px);
@@ -455,15 +458,15 @@ html,body{width:100%;height:100%;background:var(--white);overflow:hidden;font-fa
   /* 文字疊在照片上，位置往下 25svh */
   .dialogue-inner{
     position:absolute;
-    top:36svh;
+    top:48svh;
     left:50%;
     transform:translateX(-50%);
-    width:min(72vw,300px);
+    width:min(82vw,340px);
     display:flex;
     align-items:center;
     justify-content:center;
     flex-direction:column;
-    padding:0 5%;
+    padding:0 2%;
     text-align:center;
     z-index:10;
   }
@@ -558,7 +561,7 @@ html,body{width:100%;height:100%;background:var(--white);overflow:hidden;font-fa
 
 <!-- NAV -->
 <nav id="nav">
-  <a id="logo" href="index_15.html">
+  <a id="logo" href="index.html">
     <svg width="173" height="20" viewBox="0 0 173 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M82.5 0V5H77.5V10H67.5V5H72.5V0H82.5ZM82.5 10V15H77.5V10H82.5ZM77.5 15V20H67.5V15H77.5Z" fill="black"/>
       <path d="M102.5 0V5H97.5V20H92.5V5H87.5V0H102.5Z" fill="black"/>
@@ -572,7 +575,7 @@ html,body{width:100%;height:100%;background:var(--white);overflow:hidden;font-fa
     </svg>
   </a>
   <ul id="nav-links">
-    <li><a href="index_15.html">Home</a></li>
+    <li><a href="index.html">Home</a></li>
     <li><a href="#" class="active">About</a></li>
     <li><a href="works.html">Works</a></li>
     <li><a href="blog.html">Blog</a></li>
@@ -588,7 +591,7 @@ html,body{width:100%;height:100%;background:var(--white);overflow:hidden;font-fa
   </div>
 </nav>
 <div id="mobile-menu">
-  <a href="index_15.html" class="mobile-link" style="--i:0" onclick="closeMobileMenu()">Home</a>
+  <a href="index.html" class="mobile-link" style="--i:0" onclick="closeMobileMenu()">Home</a>
   <a href="#" class="mobile-link" style="--i:1" onclick="closeMobileMenu()">About</a>
   <a href="works.html" class="mobile-link" style="--i:2" onclick="closeMobileMenu()">Works</a>
   <a href="blog.html" class="mobile-link" style="--i:3" onclick="closeMobileMenu()">Blog</a>
@@ -713,23 +716,23 @@ html,body{width:100%;height:100%;background:var(--white);overflow:hidden;font-fa
 <script>
 const QA=[
   {q_en:'Who are you?',q_zh:'你是誰？',
-   a_en:`I'm Amii, a designer based in Taiwan. Industrial design background, nearly two decades in the field — big corps, startups, freelance. <strong>Design, to me, is solving problems with aesthetics and logic.</strong>`,
-   a_zh:`我是 Amii，台灣設計師。工商業設計背景，入行十幾年待過大公司，加入新創，也自由接案。<strong>設計對我而言是用美感和邏輯去解決問題。</strong>`},
+   a_en:`I'm Amii, a designer based in Taiwan. Industrial design background, nearly two decades in the field — big corps, startups, freelance. <strong class="block-strong">Design, to me, is solving problems with aesthetics and logic.</strong>`,
+   a_zh:`我是 Amii，台灣設計師。工商業設計背景，入行十幾年待過大公司，加入新創，也自由接案。<strong class="block-strong">設計對我而言是用美感和邏輯去解決問題。</strong>`},
   {q_en:'What kind of work do you do?',q_zh:'你做過哪些類型的案子？',
-   a_en:`<strong>Brand identity, UX/UI, web design, rebranding, logo, CI design</strong> — across 10+ industries, from consumer electronics and healthtech to Web3 and AI startups. <strong>Design is everywhere. So is the curiosity to keep learning.</strong>`,
-   a_zh:`<strong>品牌識別、UX/UI、網站設計、Rebranding、Logo、CI Design</strong>，橫跨 10+ 個產業，從消費電子、醫療科技，到 Web3 和 AI 新創。<strong>設計無所不在，好奇心也是。</strong>`},
+   a_en:`<strong>Brand identity, UX &amp; web design, rebranding, logo</strong> — consumer electronics, fashion-tech (3D body scanning, digital garments, virtual try-on), Web3 and AI startups. 10+ industries. <strong class="block-strong">Design is everywhere. So is the curiosity to keep learning.</strong>`,
+   a_zh:`<strong>品牌識別、UX &amp; 網站設計、Rebranding、Logo</strong>，消費性電子產品到時尚科技—3D 人體掃描，數位服裝和虛擬試穿，還有 Web3、AI 新創。橫跨 10+ 個產業。<strong class="block-strong">設計無所不在，好奇心也是。</strong>`},
   {q_en:'How do you approach design?',q_zh:'你的設計方法是什麼？',
-   a_en:`Ask "why" before "what." <strong>Good design starts with understanding people, not pixels.</strong>`,
-   a_zh:`在問「要做什麼」之前，先問「為什麼」。<strong>好的設計從理解人開始，不是從畫面開始。</strong>`},
+   a_en:`Ask "why" before "what." Starting from user research — interviews, flow mapping, pain points — then into design. <strong class="block-strong">Good design starts with understanding people, not pixels.</strong>`,
+   a_zh:`在問「要做什麼」之前，先問「為什麼」。從 user research 出發訪談、流程梳理、痛點分析再開始設計。<strong class="block-strong">好的設計從理解人開始，不是從畫面開始。</strong>`},
   {q_en:'Based on your experience, how old are you?',q_zh:'看你工作經驗這麼久，你幾歲呢？',
    a_en:`Woah, buy me a coffee first! That's top-secret information. <strong>But I started designing before the iPhone existed</strong> — make of that what you will.`,
    a_zh:`哈哈，好歹先請我喝杯咖啡吧！那可是最高機密呢。<strong>不過：我入行的時候，還沒有 iPhone。</strong>`},
   {q_en:'What do you do outside of work?',q_zh:'工作以外你在做什麼？',
-   a_en:`Travel, galleries, making things, watching films. <strong>Also taking care of one cat and another small primate who's still socializing.</strong>`,
-   a_zh:`旅遊、逛展覽、手作、看電影。<strong>還有照顧一隻貓和另一個還在社會化的小小靈長類。</strong>`},
-  {q_en:'Are you available for projects?',q_zh:'合作方式？',
-   a_en:`Selectively, yes. I like meaningful, longer-term collaborations. <strong>If you care about the "why" behind your brand, let's talk.</strong>`,
-   a_zh:`看專案而定，我喜歡有深度品質的合作。<strong>如果你的品牌也認真思考「為什麼」，歡迎聯絡我。</strong>`}
+   a_en:`Travel, galleries, making things, watching films. <strong class="block-strong">Also taking care of one cat and another small primate who's still socializing.</strong>`,
+   a_zh:`旅遊、逛展覽、手作、看電影。<strong class="block-strong">還有照顧一隻貓和另一個還在社會化的小小靈長類。</strong>`},
+  {q_en:'How do we start?',q_zh:'怎麼開始合作？',
+   a_en:`I'm drawn to collaborations with depth — not just delivering designs, but truly understanding your brand and goals. <strong class="block-strong">If that resonates, I'd love to hear from you.</strong>`,
+   a_zh:`我喜歡有深度的合作—不只是交付設計，而是真正理解你的品牌和目標。<strong class="block-strong">如果你也這樣想，歡迎寄 email 給我聊聊，我會盡快回覆。</strong>`}
 ];
 
 const LS={
