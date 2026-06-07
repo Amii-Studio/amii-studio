@@ -311,7 +311,7 @@
       gap:5px;width:28px;height:28px;cursor:pointer;
       background:none;border:none;padding:0;z-index:110;flex-shrink:0;
     }
-    #hamburger span{display:block;width:100%;height:2px;background:#0a0a0a;border-radius:2px;transition:transform 0.3s ease,opacity 0.3s ease,width 0.3s ease,background 0.3s;}
+    #hamburger span{display:block;width:100%;height:2px;background:#0a0a0a;border-radius:0;transition:transform 0.3s ease,opacity 0.3s ease,width 0.3s ease,background 0.3s;}
     #nav.white-nav #hamburger span{background:white;}
     #hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
     #hamburger.open span:nth-child(2){width:0;opacity:0;}

@@ -194,6 +194,8 @@ body{background:var(--white);color:var(--black);overflow-x:hidden;}
 }
 .about-photo-box img{
   width:100%;height:100%;object-fit:cover;display:block;
+  transform: scale(1.12);
+  transform-origin: center top;
 }
 
 .about-photo-placeholder-label{
@@ -234,8 +236,8 @@ body{background:var(--white);color:var(--black);overflow-x:hidden;}
   align-items:flex-start;
 }
 .stat-item{
-  display:flex;flex-direction:column;align-items:center;
-  text-align:center;
+  display:flex;flex-direction:column;align-items:flex-start;
+  text-align:left;
   flex:1;
 }
 .stat-num{
@@ -259,7 +261,7 @@ body{background:var(--white);color:var(--black);overflow-x:hidden;}
   font-family:var(--font-body);font-size:clamp(1.5rem,3.5vw,64px);
   font-weight:400;letter-spacing:-0.03em;text-transform:uppercase;line-height:1.15;
 }
-.about-services .thin{font-weight:300;opacity:0.5;}
+.about-services .thin{font-weight:100;opacity:1;color:inherit;}
 
 .btn-link{
   font-family:var(--font-body);font-size:clamp(0.9rem,1.5vw,24px);font-weight:500;
