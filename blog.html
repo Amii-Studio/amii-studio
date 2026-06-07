@@ -703,7 +703,7 @@ function switchArticle(id) {
 /* ── Article overlay ── */
 const articleOverlay = document.getElementById('article-overlay');
 
-function openArticle(data, id=0) {
+async function openArticle(data, id=0) {
   const sy = window.scrollY;
   document.body.style.top      = `-${sy}px`;
   document.body.style.position = 'fixed';
@@ -727,7 +727,26 @@ function openArticle(data, id=0) {
   ).join('');
   document.getElementById('article-date').textContent  = formatDate(data.publishDate);
   document.getElementById('article-title').textContent = data.title;
-  document.getElementById('article-body').innerHTML    = data.content || data.body || '';
+
+  const bodyEl = document.getElementById('article-body');
+  if (data.content) {
+    bodyEl.innerHTML = data.content;
+  } else {
+    bodyEl.innerHTML = '<p>內文載入中…</p>';
+    try {
+      const res  = await fetch(`/api/posts?id=${encodeURIComponent(data.id)}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const json = await res.json();
+      data.content = json.content || '';
+      // 確認使用者沒有切到別篇文章
+      if (document.getElementById('article-title').textContent === data.title) {
+        bodyEl.innerHTML = data.content || '<p>（沒有內文）</p>';
+      }
+    } catch (err) {
+      console.error('Failed to fetch article content:', err);
+      bodyEl.innerHTML = '<p>內文載入失敗，請重新整理頁面</p>';
+    }
+  }
 
   // prev / next
   const nav = document.getElementById('article-nav');

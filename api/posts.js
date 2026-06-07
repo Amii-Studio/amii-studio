@@ -1,11 +1,148 @@
+const NOTION_TOKEN = process.env.NOTION_TOKEN;
+const DATABASE_ID = process.env.NOTION_DATABASE_ID;
+
+function escapeHtml(text) {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function richTextToHtml(richText = []) {
+  return richText.map(rt => {
+    let text = escapeHtml(rt.plain_text || '');
+    const ann = rt.annotations || {};
+    if (ann.code) text = `<code>${text}</code>`;
+    if (ann.bold) text = `<strong>${text}</strong>`;
+    if (ann.italic) text = `<em>${text}</em>`;
+    if (ann.strikethrough) text = `<del>${text}</del>`;
+    if (ann.underline) text = `<u>${text}</u>`;
+    if (rt.href) text = `<a href="${rt.href}" target="_blank" rel="noopener noreferrer">${text}</a>`;
+    return text;
+  }).join('');
+}
+
+async function fetchBlockChildren(blockId) {
+  let blocks = [];
+  let cursor;
+  do {
+    const url = new URL(`https://api.notion.com/v1/blocks/${blockId}/children`);
+    url.searchParams.set('page_size', '100');
+    if (cursor) url.searchParams.set('start_cursor', cursor);
+
+    const res = await fetch(url, {
+      headers: {
+        'Authorization': `Bearer ${NOTION_TOKEN}`,
+        'Notion-Version': '2022-06-28',
+      }
+    });
+    const data = await res.json();
+    blocks = blocks.concat(data.results || []);
+    cursor = data.has_more ? data.next_cursor : null;
+  } while (cursor);
+  return blocks;
+}
+
+async function blocksToHtml(blocks) {
+  const htmlParts = [];
+  let listBuffer = [];
+  let listType = null;
+
+  const flushList = () => {
+    if (listBuffer.length) {
+      htmlParts.push(`<${listType}>${listBuffer.join('')}</${listType}>`);
+      listBuffer = [];
+      listType = null;
+    }
+  };
+
+  for (const block of blocks) {
+    const type = block.type;
+    const value = block[type] || {};
+    const text = richTextToHtml(value.rich_text);
+
+    let childrenHtml = '';
+    if (block.has_children) {
+      const children = await fetchBlockChildren(block.id);
+      childrenHtml = await blocksToHtml(children);
+    }
+
+    if (type === 'bulleted_list_item' || type === 'numbered_list_item') {
+      const tag = type === 'bulleted_list_item' ? 'ul' : 'ol';
+      if (listType !== tag) {
+        flushList();
+        listType = tag;
+      }
+      listBuffer.push(`<li>${text}${childrenHtml}</li>`);
+      continue;
+    }
+
+    flushList();
+
+    switch (type) {
+      case 'paragraph':
+        htmlParts.push(`<p>${text}</p>${childrenHtml}`);
+        break;
+      case 'heading_1':
+        htmlParts.push(`<h1>${text}</h1>`);
+        break;
+      case 'heading_2':
+        htmlParts.push(`<h2>${text}</h2>`);
+        break;
+      case 'heading_3':
+        htmlParts.push(`<h3>${text}</h3>`);
+        break;
+      case 'quote':
+        htmlParts.push(`<blockquote>${text}${childrenHtml}</blockquote>`);
+        break;
+      case 'code':
+        htmlParts.push(`<pre><code>${escapeHtml((value.rich_text || []).map(rt => rt.plain_text).join(''))}</code></pre>`);
+        break;
+      case 'image': {
+        const src = value.type === 'external' ? value.external?.url : value.file?.url;
+        const caption = richTextToHtml(value.caption);
+        htmlParts.push(`<figure><img src="${src}" alt="${caption.replace(/<[^>]+>/g, '')}" />${caption ? `<figcaption>${caption}</figcaption>` : ''}</figure>`);
+        break;
+      }
+      case 'divider':
+        htmlParts.push('<hr />');
+        break;
+      case 'to_do': {
+        const checked = value.checked ? 'checked' : '';
+        htmlParts.push(`<p><input type="checkbox" disabled ${checked} /> ${text}</p>`);
+        break;
+      }
+      case 'callout':
+        htmlParts.push(`<div class="callout">${text}${childrenHtml}</div>`);
+        break;
+      default:
+        if (text) htmlParts.push(`<p>${text}</p>`);
+        break;
+    }
+  }
+
+  flushList();
+  return htmlParts.join('');
+}
+
+async function getPostContent(pageId) {
+  const blocks = await fetchBlockChildren(pageId);
+  return blocksToHtml(blocks);
+}
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET');
 
-  const NOTION_TOKEN = process.env.NOTION_TOKEN;
-  const DATABASE_ID = process.env.NOTION_DATABASE_ID;
+  const { id } = req.query || {};
 
   try {
+    if (id) {
+      const content = await getPostContent(id);
+      res.status(200).json({ id, content });
+      return;
+    }
+
     const response = await fetch(`https://api.notion.com/v1/databases/${DATABASE_ID}/query`, {
       method: 'POST',
       headers: {
