@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light">
   <title>Works — Amii Studio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,12 +20,12 @@
       --font-body: 'Poppins', sans-serif;
     }
 
-    html { scroll-behavior: smooth; overflow-y: scroll; }
+    html { scroll-behavior: smooth; overflow-y: scroll; color-scheme: light; }
 
     body {
       font-family: var(--font-body);
-      background: var(--white);
-      color: var(--black);
+      background: #fafafa;
+      color: #0a0a0a;
       overflow-x: hidden;
     }
 
@@ -263,7 +264,6 @@
       pointer-events: none;
       transform: translateY(0);
       transition: opacity 0.38s ease, transform 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      will-change: opacity, transform;
     }
     #work-overlay.open {
       opacity: 1;
@@ -311,6 +311,7 @@
     #overlay-close:hover::before { transform: rotate(-225deg); }
     #overlay-close:hover::after  { transform: rotate(225deg); }
     #work-overlay.open #overlay-close { opacity: 1; }
+    #overlay-close.visible { opacity: 1; }
 
     #overlay-inner {
       max-width: 740px;
@@ -420,9 +421,11 @@
 </head>
 <body>
 
-<!-- ── DETAIL OVERLAY (方案 A) ── -->
+<!-- ── CLOSE BUTTON（在 overlay 外，不受 overflow 影響）── -->
+<button id="overlay-close" onclick="closeOverlay()" aria-label="Close"></button>
+
+<!-- ── DETAIL OVERLAY ── -->
 <div id="work-overlay">
-  <button id="overlay-close" onclick="closeOverlay()" aria-label="Close"></button>
   <div id="overlay-inner">
     <div class="overlay-main-img" id="overlay-main-img">
       <div class="work-img-placeholder">Image coming soon</div>
@@ -695,9 +698,11 @@ function openOverlay(e, data) {
 
   overlay.scrollTop = 0;
   overlay.classList.add('open');
+  document.getElementById('overlay-close').classList.add('visible');
 }
 
 function closeOverlay() {
+  document.getElementById('overlay-close').classList.remove('visible');
   overlay.classList.add('is-closing');
   setTimeout(() => {
     overlay.classList.remove('open');
