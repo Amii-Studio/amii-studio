@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light">
   <title>Works — Amii Studio</title>
+  <link rel="icon" href="favicon-light.svg" media="(prefers-color-scheme: light)">
+  <link rel="icon" href="favicon-dark.svg" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/png" sizes="48x48" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -535,19 +539,23 @@ function escapeAttr(str) {
     .replace(/</g, '&lt;');
 }
 
+function isZhActive() {
+  return localStorage.getItem('amii-lang') === 'zh';
+}
+
 function workCardHtml(work) {
   const tags = (work.subTags && work.subTags.length) ? work.subTags.join(' · ') : (work.category || '');
   const imgHtml = work.coverImage
     ? `<img src="${work.coverImage}" alt="${escapeAttr(work.title)}" loading="lazy" />`
     : `<div class="work-img-placeholder">Image coming soon</div>`;
-  const desc = work.descriptionZh || work.descriptionEn || '';
   return `
     <a class="work-card" href="#"
        data-id="${escapeAttr(work.id)}"
        data-title="${escapeAttr(work.title)}"
        data-year="${escapeAttr(work.year)}"
        data-tags="${escapeAttr(tags)}"
-       data-desc="${escapeAttr(desc)}"
+       data-desc-zh="${escapeAttr(work.descriptionZh || '')}"
+       data-desc-en="${escapeAttr(work.descriptionEn || '')}"
        data-cover="${escapeAttr(work.coverImage || '')}">
       <div class="work-img">${imgHtml}</div>
       <div class="work-info">
@@ -626,7 +634,8 @@ function initWorksInteractions() {
         title: card.dataset.title,
         year: card.dataset.year,
         tags: card.dataset.tags,
-        desc: card.dataset.desc,
+        descZh: card.dataset.descZh,
+        descEn: card.dataset.descEn,
         cover: card.dataset.cover
       });
     });
@@ -638,8 +647,21 @@ renderWorks();
 /* ── Overlay ── */
 const overlay = document.getElementById('work-overlay');
 const overlayContentCache = {};
+let activeOverlayWork = null;
+
+function renderOverlayDesc(work) {
+  if (!work) return;
+  const zh = isZhActive();
+  const desc = (zh ? work.descZh : work.descEn) || work.descZh || work.descEn || '';
+  document.getElementById('overlay-desc').textContent = desc;
+}
+
+window.addEventListener('amii-lang-change', () => {
+  if (activeOverlayWork) renderOverlayDesc(activeOverlayWork);
+});
 
 async function openOverlay(work) {
+  activeOverlayWork = work;
   const sy = window.scrollY;
   document.body.style.top = `-${sy}px`;
   document.body.style.position = 'fixed';
@@ -649,7 +671,7 @@ async function openOverlay(work) {
   document.getElementById('overlay-title').textContent = work.title || '';
   document.getElementById('overlay-year').textContent  = work.year || '';
   document.getElementById('overlay-tags').textContent  = work.tags || '';
-  document.getElementById('overlay-desc').textContent  = work.desc || '';
+  renderOverlayDesc(work);
 
   const mainImgEl = document.getElementById('overlay-main-img');
   mainImgEl.innerHTML = work.cover
@@ -689,6 +711,7 @@ function closeOverlay() {
   setTimeout(() => {
     overlay.classList.remove('open');
     overlay.classList.remove('is-closing');
+    activeOverlayWork = null;
     const sy = parseInt(document.body.style.top || '0') * -1;
     document.body.style.position = '';
     document.body.style.top = '';

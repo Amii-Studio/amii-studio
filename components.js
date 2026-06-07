@@ -218,6 +218,7 @@
     function applyLang(zh) {
       isZh = zh;
       localStorage.setItem(isZhKey, zh ? 'zh' : 'en');
+      window.dispatchEvent(new CustomEvent('amii-lang-change', { detail: { zh } }));
 
       // nav active states
       const langEl = document.getElementById('lang');
