@@ -9,6 +9,8 @@
   /* ── 判斷目前頁面，設定 active nav link ── */
   const page = location.pathname.split('/').pop() || 'index.html';
   const isHome = page === 'index.html' || page === '' || page === 'index_15.html';
+  // Blog 目前僅提供中文內容，暫不顯示語言切換鈕
+  const showLangSwitch = page !== 'blog.html';
 
   /* ── Nav HTML ── */
   const LOGO_SVG = `<svg width="173" height="20" viewBox="0 0 173 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -59,11 +61,11 @@
       <button id="hamburger" aria-label="Menu" style="display:none;">
         <span></span><span></span><span></span>
       </button>
-      <div id="lang">
+      ${showLangSwitch ? `<div id="lang">
         <span class="lang-en">EN</span>
         <span class="lang-sep">|</span>
         <span class="lang-zh">中</span>
-      </div>
+      </div>` : ''}
     </div>`;
 
   /* Mobile Menu DOM */
