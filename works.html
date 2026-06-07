@@ -36,6 +36,7 @@
     /* ── PAGE HEADER ── */
     #works-header {
       padding: 48px 72px 40px;
+      border-bottom: 1px solid rgba(10,10,10,0.1);
     }
 
     .works-header-meta {
@@ -59,22 +60,14 @@
       gap: 24px;
     }
 
-    .works-page-title-wrap {
-      display: inline-block;
-      overflow: hidden;
-      line-height: 0.92;
-      padding-bottom: 0.06em;
-      vertical-align: bottom;
-    }
     .works-page-title {
       font-size: clamp(56px, 8vw, 120px);
       font-weight: 400;
       line-height: 0.95;
       text-transform: uppercase;
       letter-spacing: -0.02em;
-      display: inline-block;
-      transform: translateY(110%);
-      will-change: transform;
+      opacity: 0;
+      transform: translateX(-60px);
     }
 
     .works-arrow {
@@ -82,8 +75,6 @@
       height: clamp(40px, 4.5vw, 80px);
       flex-shrink: 0;
       opacity: 0;
-      transform: translateY(10px);
-      will-change: transform, opacity;
     }
 
     /* ── WORKS BODY ── */
@@ -285,39 +276,41 @@
       transform: translateY(-48px);
     }
 
-    /* ── close button ── */
-    .close-btn {
+    #overlay-close {
       position: fixed;
       top: 24px;
-      right: 68px;
+      right: 72px;
       width: 48px;
       height: 48px;
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
-      z-index: 500;
-      opacity: 0;
+      z-index: 410;
       background: none;
       border: none;
       padding: 0;
-      text-indent: -9999px;
+      opacity: 0;
       transition: opacity 0.3s ease 0.2s;
+      overflow: hidden;
+      font-size: 0;
+      color: transparent;
+      -webkit-tap-highlight-color: transparent;
     }
-    .close-btn::before,
-    .close-btn::after {
+    #overlay-close::before,
+    #overlay-close::after {
       content: '';
-      width: 100%;
-      height: 1px;
-      background: var(--black);
+      width: 100%; height: 1.5px;
+      background: #0a0a0a;
       position: absolute;
-      top: 50%;
-      left: 0;
+      top: 50%; left: 0;
       transition: transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
     }
-    .close-btn::before { transform: rotate(-45deg); }
-    .close-btn::after  { transform: rotate(45deg); }
-    .close-btn:hover::before { transform: rotate(-225deg); }
-    .close-btn:hover::after  { transform: rotate(225deg); }
-body.overlay-open .close-btn { opacity: 1; }
+    #overlay-close::before { transform: rotate(-45deg); }
+    #overlay-close::after  { transform: rotate(45deg); }
+    #overlay-close:hover::before { transform: rotate(-225deg); }
+    #overlay-close:hover::after  { transform: rotate(225deg); }
+    #work-overlay.open #overlay-close { opacity: 1; }
 
     #overlay-inner {
       max-width: 740px;
@@ -420,18 +413,17 @@ body.overlay-open .close-btn { opacity: 1; }
       .works-page-title { opacity: 1 !important; transform: none !important; }
       .works-arrow { opacity: 1 !important; }
       .category-divider { transform: scaleX(1) !important; }
-      #overlay-close { top: 16px; right: 5%; }
-      #overlay-inner { padding: 64px 0 80px; }
+      #overlay-close { top: 20px; right: 20px; }
+      #overlay-inner { padding: 72px 24px 80px; }
     }
   </style>
-  <link rel="icon" href="favicon-light.svg" media="(prefers-color-scheme: light)">
-  <link rel="icon" href="favicon-dark.svg" media="(prefers-color-scheme: dark)">
 </head>
 <body>
 
 <!-- ── DETAIL OVERLAY (方案 A) ── -->
-<button class="close-btn" onclick="closeOverlay()">Close</button>
-<div id="work-overlay">  <div id="overlay-inner">
+<div id="work-overlay">
+  <button id="overlay-close" onclick="closeOverlay()" aria-label="Close"></button>
+  <div id="overlay-inner">
     <div class="overlay-main-img" id="overlay-main-img">
       <div class="work-img-placeholder">Image coming soon</div>
     </div>
@@ -454,7 +446,7 @@ body.overlay-open .close-btn { opacity: 1; }
       <span class="dim">2021 – 2026</span>
     </div>
     <div class="works-title-row">
-      <div class="works-page-title-wrap"><h1 class="works-page-title">Works</h1></div>
+      <h1 class="works-page-title">Works</h1>
       <svg class="works-arrow" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
         <line x1="12" y1="12" x2="84" y2="84" stroke="#0a0a0a" stroke-width="2.5" stroke-linecap="round"/>
         <line x1="44" y1="84" x2="84" y2="84" stroke="#0a0a0a" stroke-width="2.5" stroke-linecap="round"/>
@@ -644,8 +636,8 @@ body.overlay-open .close-btn { opacity: 1; }
 <script>
 gsap.registerPlugin(ScrollTrigger);
 
-gsap.to('.works-page-title', { y: '0%', duration: 1.0, ease: 'power4.out', delay: 0.2 });
-gsap.to('.works-arrow', { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', delay: 0.5 });
+gsap.to('.works-page-title', { opacity:1, x:0, duration:0.9, ease:'power3.out', delay:0.15 });
+gsap.to('.works-arrow',      { opacity:1, duration:0.6, ease:'power2.out', delay:0.45 });
 
 gsap.utils.toArray('.category-title').forEach(el => {
   gsap.to(el, { opacity:1, y:0, duration:0.65, ease:'power2.out',
@@ -703,7 +695,6 @@ function openOverlay(e, data) {
 
   overlay.scrollTop = 0;
   overlay.classList.add('open');
-  document.body.classList.add('overlay-open');
 }
 
 function closeOverlay() {
@@ -711,7 +702,6 @@ function closeOverlay() {
   setTimeout(() => {
     overlay.classList.remove('open');
     overlay.classList.remove('is-closing');
-    document.body.classList.remove('overlay-open');
     const sy = parseInt(document.body.style.top || '0') * -1;
     document.body.style.position = '';
     document.body.style.top = '';
