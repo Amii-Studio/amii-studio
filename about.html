@@ -22,8 +22,7 @@ html,body{width:100%;height:100%;background:var(--white);overflow:hidden;font-fa
 
 /* ══ NAV ══ */
 #nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:72px;background:rgba(250,250,250,0.95);backdrop-filter:blur(12px);}
-#logo{display:flex;align-items:center;text-decoration:none;height:18px;}
-#logo svg{height:100%;width:auto;}
+/* #logo height handled by components.js (20px desktop / 16px mobile) */
 #nav-links{display:flex;align-items:center;gap:clamp(20px,3vw,44px);list-style:none;}
 #nav-links a{font-size:clamp(0.75rem,0.9vw,0.95rem);color:var(--black);text-decoration:none;opacity:.55;transition:opacity .2s;}
 #nav-links a:hover,#nav-links a.active{opacity:1;}
