@@ -147,7 +147,7 @@ body{background:var(--white);color:var(--black);overflow-x:hidden;}
   pointer-events:none;z-index:2;overflow:visible;
 }
 #curve-path{
-  fill:none;stroke:var(--mint);stroke-width:18;
+  fill:none;stroke:var(--mint);stroke-width:28;
   stroke-linecap:round;stroke-linejoin:round;
   stroke-dasharray:4000;stroke-dashoffset:4000;
 }
@@ -252,8 +252,8 @@ body{background:var(--white);color:var(--black);overflow-x:hidden;}
   font-weight:400;display:block;margin-top:8px;
   color:rgba(10,10,10,0.35);
 }
-/* ∞ 和數字同高，靠底部對齊讓 label 齊行 */
-.stat-infinity{ font-size:clamp(2rem,4.5vw,64px); }
+/* ∞ 和數字同高，不可比其他數字大 */
+.stat-infinity{ font-size:clamp(2rem,4.5vw,64px); line-height:1; overflow:visible; }
 
 /* 修正2: services 用 Poppins Regular (400) */
 .about-services{list-style:none;}
@@ -726,6 +726,8 @@ body{background:var(--white);color:var(--black);overflow-x:hidden;}
     z-index:5 !important; /* 強過手機照片 stacking context */
     position:absolute !important;
   }
+  /* 手機 viewBox 縮放導致筆畫顯示偏細，補回視覺粗細 */
+  #curve-path{ stroke-width:80; }
   #about-section{ position:relative; z-index:auto; }
   .about-left-col{ z-index:10 !important; }
 
@@ -738,11 +740,12 @@ body{background:var(--white);color:var(--black);overflow-x:hidden;}
   .about-plus-row span{ font-size:28px; }
   .about-plus-row span:nth-child(n+9){ display:none; } /* 只顯示前 8 個 */
 
-  /* stats 縱排 */
+  /* stats 橫排，三欄並列 */
   .about-bottom-row{ grid-template-columns:1fr; gap:28px; padding-top:0; }
-  .about-stats{ flex-direction:column; gap:16px; }
-  .stat-num{ font-size:clamp(1.8rem,9vw,2.8rem); }
-  .stat-infinity{ font-size:clamp(2.3rem,11.7vw,3.6rem); }
+  .about-stats{ flex-direction:row; gap:0; align-items:flex-start; }
+  .stat-item{ flex:1; }
+  .stat-num{ font-size:clamp(1.8rem,9vw,2.8rem); min-height:clamp(2.2rem,10.5vw,3.2rem); }
+  .stat-infinity{ font-size:clamp(1.8rem,9vw,2.8rem); }
   .about-services li{ font-size:clamp(1.4rem,7.5vw,2.2rem); }
 
   /* ── WORKS ── */
@@ -870,7 +873,7 @@ body{background:var(--white);color:var(--black);overflow-x:hidden;}
   <!-- curve SVG -->
   <svg id="curve-svg" viewBox="0 0 1920 3200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
     <!-- path: loops through about section then sweeps down into works -->
-    <path id="curve-path" d="M 300 -100 C 500 200, 200 500, 400 600 C 600 700, 700 400, 500 800 C 350 1100, 800 1200, 1200 900 C 1500 650, 1700 300, 1900 100 C 1950 500, 1600 900, 1300 1300 C 1000 1700, 600 2000, 800 2400 C 1000 2800, 1400 2900, 1600 3100"/>
+    <path id="curve-path" d="M 80 0 C 300 200, 200 500, 400 600 C 600 700, 700 400, 500 800 C 350 1100, 800 1200, 1200 900 C 1500 650, 1700 300, 1900 100 C 1950 500, 1600 900, 1300 1300 C 1000 1700, 600 2000, 800 2400 C 1000 2800, 1400 2900, 1600 3100"/>
   </svg>
 
   <!-- TOP ROW: intro left | photo right -->

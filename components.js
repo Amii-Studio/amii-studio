@@ -470,6 +470,7 @@
 
     @media(max-width:768px){
       #nav{padding:0 5%;height:56px;}
+      #logo{height:16px;}
       #nav-links{display:none;}
       #hamburger{display:flex!important;}
 
