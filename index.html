@@ -727,7 +727,7 @@ body{background:var(--white);color:var(--black);overflow-x:hidden;}
     position:absolute !important;
   }
   /* 手機 viewBox 縮放導致筆畫顯示偏細，補回視覺粗細 */
-  #curve-path{ stroke-width:80; }
+  #curve-path{ stroke-width:48; }
   #about-section{ position:relative; z-index:auto; }
   .about-left-col{ z-index:10 !important; }
 
@@ -740,11 +740,10 @@ body{background:var(--white);color:var(--black);overflow-x:hidden;}
   .about-plus-row span{ font-size:28px; }
   .about-plus-row span:nth-child(n+9){ display:none; } /* 只顯示前 8 個 */
 
-  /* stats 橫排，三欄並列 */
+  /* stats 縱排 */
   .about-bottom-row{ grid-template-columns:1fr; gap:28px; padding-top:0; }
-  .about-stats{ flex-direction:row; gap:0; align-items:flex-start; }
-  .stat-item{ flex:1; }
-  .stat-num{ font-size:clamp(1.8rem,9vw,2.8rem); min-height:clamp(2.2rem,10.5vw,3.2rem); }
+  .about-stats{ flex-direction:column; gap:16px; }
+  .stat-num{ font-size:clamp(1.8rem,9vw,2.8rem); }
   .stat-infinity{ font-size:clamp(1.8rem,9vw,2.8rem); }
   .about-services li{ font-size:clamp(1.4rem,7.5vw,2.2rem); }
 
