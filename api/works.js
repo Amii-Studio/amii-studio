@@ -214,8 +214,8 @@ export default async function handler(req, res) {
         subTags: props['次標籤']?.multi_select?.map(t => t.name) || [],
         year: props['年份']?.rich_text?.[0]?.plain_text || '',
         coverImage: props['封面圖']?.url || '',
-        descriptionZh: props['說明_zh']?.rich_text?.[0]?.plain_text || '',
-        descriptionEn: props['說明_en']?.rich_text?.[0]?.plain_text || '',
+        descriptionZh: (props['說明_zh']?.rich_text || []).map(rt => rt.plain_text).join('') || '',
+        descriptionEn: (props['說明_en']?.rich_text || []).map(rt => rt.plain_text).join('') || '',
         status: props['狀態']?.status?.name || '',
       };
     });

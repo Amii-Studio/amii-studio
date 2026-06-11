@@ -658,7 +658,15 @@ function renderOverlayDesc(work) {
   if (!work) return;
   const zh = isZhActive();
   const desc = (zh ? work.descZh : work.descEn) || work.descZh || work.descEn || '';
-  document.getElementById('overlay-desc').textContent = desc;
+  const escaped = String(desc)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+  const html = escaped
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/&lt;br\s*\/?&gt;/gi, '<br>')
+    .replace(/\n/g, '<br>');
+  document.getElementById('overlay-desc').innerHTML = html;
 }
 
 window.addEventListener('amii-lang-change', () => {
