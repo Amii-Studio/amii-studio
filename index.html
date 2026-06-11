@@ -942,7 +942,7 @@ body{background:var(--white);color:var(--black);overflow-x:hidden;}
     </div>
     <a href="works.html" class="see-all-link" data-en="See all works" data-zh="所有設計">See all works</a>
   </div>
-  <div class="works-grid">
+  <div class="works-grid" id="home-works-grid">
     <div class="work-item">
       <img src="https://www.figma.com/api/mcp/asset/d78594d7-5e7f-4848-b2a3-ea221b9cbbbc" alt="Project 1">
       <div class="work-overlay"><span class="work-title">Brand Identity</span></div>
@@ -961,6 +961,37 @@ body{background:var(--white);color:var(--black);overflow-x:hidden;}
     </div>
   </div>
 </section>
+<script>
+(function() {
+  fetch('/api/works')
+    .then(res => res.json())
+    .then(data => {
+      const works = (data.works || []).slice(0, 4);
+      if (!works.length) return;
+      const grid = document.getElementById('home-works-grid');
+      const items = grid.querySelectorAll('.work-item');
+      works.forEach((work, i) => {
+        const item = items[i];
+        if (!item) return;
+        const img = item.querySelector('img');
+        const title = item.querySelector('.work-title');
+        if (work.coverImage) {
+          img.src = work.coverImage;
+          img.alt = work.title || '';
+        }
+        if (title) title.textContent = work.title || '';
+        item.style.cursor = 'pointer';
+        item.addEventListener('click', () => {
+          window.location.href = `works.html?id=${work.id}`;
+        });
+      });
+      for (let i = works.length; i < items.length; i++) {
+        items[i].style.display = 'none';
+      }
+    })
+    .catch(() => {});
+})();
+</script>
 
 <!-- ══ CLIENTS LOOP ══ -->
 <!-- FIX 4: proper clients marquee -->

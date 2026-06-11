@@ -613,6 +613,25 @@ async function renderWorks() {
   }
 
   initWorksInteractions();
+
+  const params = new URLSearchParams(location.search);
+  const deepLinkId = params.get('id');
+  if (deepLinkId) {
+    const card = document.querySelector(`.work-card[data-id="${deepLinkId}"]`);
+    if (card) {
+      setTimeout(() => {
+        openOverlay({
+          id: card.dataset.id,
+          title: card.dataset.title,
+          year: card.dataset.year,
+          tags: card.dataset.tags,
+          descZh: card.dataset.descZh,
+          descEn: card.dataset.descEn,
+          cover: card.dataset.cover
+        });
+      }, 300);
+    }
+  }
 }
 
 function initWorksInteractions() {
