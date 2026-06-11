@@ -664,6 +664,7 @@ function renderOverlayDesc(work) {
     .replace(/>/g, '&gt;');
   const html = escaped
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/_(.+?)_/g, '<em>$1</em>')
     .replace(/&lt;br\s*\/?&gt;/gi, '<br>')
     .replace(/\n/g, '<br>');
   document.getElementById('overlay-desc').innerHTML = html;

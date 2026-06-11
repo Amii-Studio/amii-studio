@@ -22,6 +22,16 @@ function richTextToHtml(richText = []) {
   }).join('');
 }
 
+function richTextToMarkdown(richText = []) {
+  return (richText || []).map(rt => {
+    let text = rt.plain_text || '';
+    const ann = rt.annotations || {};
+    if (ann.bold) text = `**${text}**`;
+    if (ann.italic) text = `_${text}_`;
+    return text;
+  }).join('');
+}
+
 async function fetchBlockChildren(blockId) {
   let blocks = [];
   let cursor;
@@ -214,8 +224,8 @@ export default async function handler(req, res) {
         subTags: props['次標籤']?.multi_select?.map(t => t.name) || [],
         year: props['年份']?.rich_text?.[0]?.plain_text || '',
         coverImage: props['封面圖']?.url || '',
-        descriptionZh: (props['說明_zh']?.rich_text || []).map(rt => rt.plain_text).join('') || '',
-        descriptionEn: (props['說明_en']?.rich_text || []).map(rt => rt.plain_text).join('') || '',
+        descriptionZh: richTextToMarkdown(props['說明_zh']?.rich_text),
+        descriptionEn: richTextToMarkdown(props['說明_en']?.rich_text),
         status: props['狀態']?.status?.name || '',
       };
     });
