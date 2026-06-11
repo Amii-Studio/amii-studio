@@ -145,8 +145,15 @@ async function blocksToHtml(blocks) {
       case 'callout':
         htmlParts.push(`<div class="callout">${text}${childrenHtml}</div>`);
         break;
+      case 'toggle':
+        htmlParts.push(`<details><summary>${text}</summary>${childrenHtml}</details>`);
+        break;
+      case 'column_list':
+      case 'column':
+        htmlParts.push(childrenHtml);
+        break;
       default:
-        if (text) htmlParts.push(`<p>${text}</p>`);
+        if (text || childrenHtml) htmlParts.push(`<p>${text}</p>${childrenHtml}`);
         break;
     }
   }
