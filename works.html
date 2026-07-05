@@ -564,13 +564,13 @@ function workCardHtml(work) {
        data-cover="${escapeAttr(work.coverImage || '')}">
       <div class="work-img">${imgHtml}</div>
       <div class="work-info">
-        <div class="work-name-wrap">
-          <span class="work-arrow-inline"><svg viewBox="0 0 20 10" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="5" x2="16" y2="5" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round"/><polyline points="10,1 16,5 10,9" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
-          <span class="work-name">${work.title || ''}</span>
-        </div>
         <div class="work-info-top">
           <span class="work-tags">${tags}</span>
           <span class="work-year">${work.year || ''}</span>
+        </div>
+        <div class="work-name-wrap">
+          <span class="work-arrow-inline"><svg viewBox="0 0 20 10" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="5" x2="16" y2="5" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round"/><polyline points="10,1 16,5 10,9" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
+          <span class="work-name">${work.title || ''}</span>
         </div>
       </div>
     </a>`;
