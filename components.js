@@ -88,7 +88,7 @@
           <a href="#" class="privacy-link copyright-link-footer" data-en="Copyright" data-zh="版權聲明" onclick="document.getElementById('copyright-dialog').showModal();return false;">Copyright</a>
         </div>
         <div class="footer-socials">
-          <a href="#" aria-label="LinkedIn">
+          <a href="https://www.linkedin.com/in/amii-studio" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
             <svg viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M26.67 26.67V16.0501C26.67 14.3176 25.9818 12.6561 24.7567 11.4311C23.5317 10.2061 21.8702 9.51784 20.1378 9.51784C18.4346 9.51784 16.4508 10.5598 15.489 12.1227V9.89856H9.89856V26.67H15.489V16.7915C15.489 15.2486 16.7314 13.9862 18.2743 13.9862C19.0183 13.9862 19.7318 14.2818 20.2579 14.8079C20.784 15.3339 21.0795 16.0475 21.0795 16.7915V26.67H26.67ZM3.38635 6.75266C4.27915 6.75266 5.13538 6.398 5.76669 5.76669C6.398 5.13538 6.75266 4.27915 6.75266 3.38635C6.75266 1.52285 5.24984 0 3.38635 0C2.48823 0 1.6269 0.356775 0.991838 0.991838C0.356775 1.6269 0 2.48823 0 3.38635C0 5.24984 1.52285 6.75266 3.38635 6.75266ZM6.17157 26.67V9.89856H0.621164V26.67H6.17157Z" fill="white"/></svg>
           </a>
           <a href="#" aria-label="Instagram">
