@@ -91,14 +91,14 @@
           <a href="https://www.linkedin.com/in/amii-studio" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
             <svg viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M26.67 26.67V16.0501C26.67 14.3176 25.9818 12.6561 24.7567 11.4311C23.5317 10.2061 21.8702 9.51784 20.1378 9.51784C18.4346 9.51784 16.4508 10.5598 15.489 12.1227V9.89856H9.89856V26.67H15.489V16.7915C15.489 15.2486 16.7314 13.9862 18.2743 13.9862C19.0183 13.9862 19.7318 14.2818 20.2579 14.8079C20.784 15.3339 21.0795 16.0475 21.0795 16.7915V26.67H26.67ZM3.38635 6.75266C4.27915 6.75266 5.13538 6.398 5.76669 5.76669C6.398 5.13538 6.75266 4.27915 6.75266 3.38635C6.75266 1.52285 5.24984 0 3.38635 0C2.48823 0 1.6269 0.356775 0.991838 0.991838C0.356775 1.6269 0 2.48823 0 3.38635C0 5.24984 1.52285 6.75266 3.38635 6.75266ZM6.17157 26.67V9.89856H0.621164V26.67H6.17157Z" fill="white"/></svg>
           </a>
-          <a href="#" aria-label="Instagram">
+          <a href="https://www.instagram.com/DesignLens_f121" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="white" stroke-width="2" fill="none"/>
               <circle cx="12" cy="12" r="5" stroke="white" stroke-width="2" fill="none"/>
               <circle cx="17.5" cy="6.5" r="1.2" fill="white"/>
             </svg>
           </a>
-          <a href="#" aria-label="Facebook">
+          <a href="https://www.facebook.com/DesignLens.f121/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
             <svg viewBox="0 0 14 27" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.3345 15.3353H12.6683L14.0018 10.0013H9.3345V7.33425C9.3345 5.96075 9.3345 4.66725 12.0015 4.66725H14.0018V0.18669C13.567 0.12935 11.9255 0 10.1919 0C6.57149 0 4.0005 2.20961 4.0005 6.26745V10.0013H0V15.3353H4.0005V26.67H9.3345V15.3353Z" fill="white"/></svg>
           </a>
         </div>
