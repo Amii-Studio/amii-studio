@@ -459,6 +459,44 @@ body.overlay-open .close-btn { opacity: 1; }
       #article-inner { padding: 72px 24px 80px; }
     }
 
+    /* ── newsletter ── */
+    .newsletter-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 24px 0;
+      border-top: 1px solid rgba(10,10,10,0.1);
+      border-bottom: 1px solid rgba(10,10,10,0.1);
+      margin: 40px 0;
+    }
+    .newsletter-text {
+      font-size: clamp(0.82rem, 0.95vw, 0.92rem);
+      color: rgba(10,10,10,0.55);
+      line-height: 1.5;
+    }
+    .newsletter-btn {
+      flex-shrink: 0;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--black);
+      border: 1px solid rgba(10,10,10,0.5);
+      padding: 8px 20px;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.2s, color 0.2s;
+    }
+    .newsletter-btn:hover {
+      background: var(--black);
+      color: var(--white);
+    }
+    .article-newsletter {
+      margin-top: 48px;
+    }
+    @media(max-width:768px){
+      .newsletter-bar { flex-direction: column; align-items: flex-start; gap: 16px; }
+    }
+
     /* ── prev / next navigation ── */
     .article-nav {
       display: flex;
@@ -527,6 +565,10 @@ body.overlay-open .close-btn { opacity: 1; }
     </div>
     <h1 class="article-title" id="article-title">文章標題</h1>
     <div class="article-body" id="article-body"></div>
+    <div class="newsletter-bar article-newsletter">
+      <span class="newsletter-text">喜歡這篇文章？訂閱 Design Lens，不定期收到設計觀點與生活美感</span>
+      <a href="https://design-lens-f-1-21.kit.com/40ab0bd834" target="_blank" rel="noopener noreferrer" class="newsletter-btn">訂閱電子報</a>
+    </div>
     <nav class="article-nav" id="article-nav"></nav>
   </div>
 </div>
@@ -548,6 +590,12 @@ body.overlay-open .close-btn { opacity: 1; }
       </svg>
     </div>
   </header>
+
+  <!-- NEWSLETTER -->
+  <div class="newsletter-bar">
+    <span class="newsletter-text">訂閱 Design Lens — 不定期分享設計觀點、美感生活與展覽紀錄</span>
+    <a href="https://design-lens-f-1-21.kit.com/40ab0bd834" target="_blank" rel="noopener noreferrer" class="newsletter-btn">訂閱電子報</a>
+  </div>
 
   <!-- TAG FILTER -->
   <div id="tag-filter">
