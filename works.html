@@ -149,15 +149,18 @@
       background: #e0e0e0;
     }
 
-    .work-img img {
+    .work-img img,
+    .work-img iframe {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
+      border: none;
       transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
-    .work-card:hover .work-img img {
+    .work-card:hover .work-img img,
+    .work-card:hover .work-img iframe {
       transform: scale(1.12);
     }
 
@@ -342,11 +345,13 @@
       aspect-ratio: 16/10;
     }
     .overlay-main-img img,
+    .overlay-main-img iframe,
     .overlay-main-img .work-img-placeholder {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
+      border: none;
     }
 
     .overlay-meta-row {
@@ -548,10 +553,16 @@ function isZhActive() {
   return localStorage.getItem('amii-lang') === 'zh';
 }
 
+function isHtmlCover(url) {
+  return /\.html?($|\?)/i.test(url || '');
+}
+
 function workCardHtml(work) {
   const tags = (work.subTags && work.subTags.length) ? work.subTags.join(' · ') : (work.category || '');
   const imgHtml = work.coverImage
-    ? `<img src="${work.coverImage}" alt="${escapeAttr(work.title)}" loading="lazy" />`
+    ? (isHtmlCover(work.coverImage)
+        ? `<iframe src="${work.coverImage}" title="${escapeAttr(work.title)}" loading="lazy" scrolling="no"></iframe>`
+        : `<img src="${work.coverImage}" alt="${escapeAttr(work.title)}" loading="lazy" />`)
     : `<div class="work-img-placeholder">Image coming soon</div>`;
   return `
     <a class="work-card" href="#"
@@ -708,7 +719,9 @@ async function openOverlay(work) {
 
   const mainImgEl = document.getElementById('overlay-main-img');
   mainImgEl.innerHTML = work.cover
-    ? `<img src="${work.cover}" alt="${work.title || ''}" />`
+    ? (isHtmlCover(work.cover)
+        ? `<iframe src="${work.cover}" title="${work.title || ''}" scrolling="no"></iframe>`
+        : `<img src="${work.cover}" alt="${work.title || ''}" />`)
     : `<div class="work-img-placeholder">Image coming soon</div>`;
 
   const gallery = document.getElementById('overlay-gallery');
