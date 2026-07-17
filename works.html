@@ -159,6 +159,10 @@
       transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
+    .work-img iframe {
+      pointer-events: none;
+    }
+
     .work-card:hover .work-img img,
     .work-card:hover .work-img iframe {
       transform: scale(1.12);
@@ -352,6 +356,9 @@
       object-fit: cover;
       display: block;
       border: none;
+    }
+    .overlay-main-img iframe {
+      pointer-events: none;
     }
 
     .overlay-meta-row {
