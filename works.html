@@ -560,15 +560,22 @@ function isZhActive() {
   return localStorage.getItem('amii-lang') === 'zh';
 }
 
-function isHtmlCover(url) {
-  return /\.html?($|\?)/i.test(url || '');
+function coverEmbedSrc(url) {
+  if (!url) return null;
+  const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/);
+  if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&mute=1&loop=1&playlist=${ytMatch[1]}&controls=0&playsinline=1`;
+  const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
+  if (vimeoMatch) return `https://player.vimeo.com/video/${vimeoMatch[1]}?autoplay=1&muted=1&loop=1&background=1`;
+  if (/\.html?($|\?)/i.test(url)) return url;
+  return null;
 }
 
 function workCardHtml(work) {
   const tags = (work.subTags && work.subTags.length) ? work.subTags.join(' · ') : (work.category || '');
+  const embedSrc = coverEmbedSrc(work.coverImage);
   const imgHtml = work.coverImage
-    ? (isHtmlCover(work.coverImage)
-        ? `<iframe src="${work.coverImage}" title="${escapeAttr(work.title)}" loading="lazy" scrolling="no"></iframe>`
+    ? (embedSrc
+        ? `<iframe src="${embedSrc}" title="${escapeAttr(work.title)}" loading="lazy" scrolling="no" allow="autoplay; fullscreen"></iframe>`
         : `<img src="${work.coverImage}" alt="${escapeAttr(work.title)}" loading="lazy" />`)
     : `<div class="work-img-placeholder">Image coming soon</div>`;
   return `
@@ -725,9 +732,10 @@ async function openOverlay(work) {
   renderOverlayDesc(work);
 
   const mainImgEl = document.getElementById('overlay-main-img');
+  const overlayEmbedSrc = coverEmbedSrc(work.cover);
   mainImgEl.innerHTML = work.cover
-    ? (isHtmlCover(work.cover)
-        ? `<iframe src="${work.cover}" title="${work.title || ''}" scrolling="no"></iframe>`
+    ? (overlayEmbedSrc
+        ? `<iframe src="${overlayEmbedSrc}" title="${work.title || ''}" scrolling="no" allow="autoplay; fullscreen"></iframe>`
         : `<img src="${work.cover}" alt="${work.title || ''}" />`)
     : `<div class="work-img-placeholder">Image coming soon</div>`;
 
