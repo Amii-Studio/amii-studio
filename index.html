@@ -1170,6 +1170,14 @@ body{background:var(--white);color:var(--black);overflow-x:hidden;}
 <script>
 gsap.registerPlugin(ScrollTrigger);
 
+/* ── Hash anchor scroll (from other pages) ── */
+window.addEventListener('load', () => {
+  if (location.hash) {
+    const target = document.querySelector(location.hash);
+    if (target) setTimeout(() => target.scrollIntoView({ behavior: 'smooth' }), 300);
+  }
+});
+
 /* ══ HERO — Matter.js ══════════════════════════════ */
 const { Engine, Render, Runner, World, Bodies, Mouse, MouseConstraint } = Matter;
 const STYLES = [
