@@ -396,6 +396,35 @@ body.overlay-open .close-btn { opacity: 1; }
       color: rgba(10,10,10,0.55);
       font-style: italic;
     }
+    .article-body .callout {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: rgba(10,10,10,0.04);
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin: 1.5em 0;
+    }
+    .article-body .callout-icon {
+      flex-shrink: 0;
+      font-size: 1.2em;
+      line-height: 1.5;
+    }
+    .article-body .callout-icon img {
+      width: 1.2em;
+      height: 1.2em;
+      display: block;
+    }
+    .article-body .callout-content {
+      flex: 1;
+      min-width: 0;
+    }
+    .article-body .callout-content p {
+      margin-bottom: 0.5em;
+    }
+    .article-body .callout-content p:last-child {
+      margin-bottom: 0;
+    }
     .article-body figure {
       margin: 2em 0;
     }

@@ -112,9 +112,15 @@ async function blocksToHtml(blocks) {
         htmlParts.push(`<p><input type="checkbox" disabled ${checked} /> ${text}</p>`);
         break;
       }
-      case 'callout':
-        htmlParts.push(`<div class="callout">${text}${childrenHtml}</div>`);
+      case 'callout': {
+        const icon = value.icon?.emoji
+          ? `<span class="callout-icon">${value.icon.emoji}</span>`
+          : (value.icon?.type === 'external' || value.icon?.type === 'file')
+            ? `<span class="callout-icon"><img src="${value.icon.external?.url || value.icon.file?.url}" alt="" /></span>`
+            : '';
+        htmlParts.push(`<div class="callout">${icon}<div class="callout-content">${text}${childrenHtml}</div></div>`);
         break;
+      }
       default:
         if (text) htmlParts.push(`<p>${text}</p>`);
         break;
