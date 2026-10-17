@@ -136,6 +136,17 @@ async function getPostContent(pageId) {
   return blocksToHtml(blocks);
 }
 
+// Notion「封面焦點」選項 → CSS object-position（未設定或未知選項 = 置中）
+const COVER_FOCUS_POSITIONS = {
+  '上': '50% 0%',
+  '偏上': '50% 25%',
+  '中': '50% 50%',
+  '偏下': '50% 75%',
+  '下': '50% 100%',
+  '左': '0% 50%',
+  '右': '100% 50%',
+};
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET');
@@ -184,6 +195,7 @@ export default async function handler(req, res) {
         subTags: props['次標籤']?.multi_select?.map(t => t.name) || [],
         publishDate: props['發布日期']?.date?.start || '',
         coverImage: props['封面圖']?.url || '',
+        coverPosition: COVER_FOCUS_POSITIONS[props['封面焦點']?.select?.name] || '50% 50%',
         status: props['狀態']?.status?.name || '',
       };
     });
